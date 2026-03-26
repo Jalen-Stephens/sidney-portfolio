@@ -29,7 +29,7 @@ export const designer = {
   philosophy:
     "Fashion begins not with trend but with touch — the weight of a fabric, the resistance of a seam. I design to outlast seasons.",
   // IMAGEKIT SWAP: Replace path string with asset path in your ImageKit library
-  portraitUrl: resolveAssetUrl("about/portrait", 720, 960),
+  portraitUrl: "https://ik.imagekit.io/xajzoz300/portfolio/sidney-about.png",
   heroImageUrl: resolveAssetUrl("home/hero-editorial", 900, 1100),
   aboutImageUrl: resolveAssetUrl("about/studio", 1000, 700),
 };
@@ -39,8 +39,8 @@ export const designer = {
 export const socialLinks: SocialLink[] = [
   {
     platform: "Instagram",
-    url: "https://instagram.com/sidneyriojas",
-    handle: "@sidneyriojas",
+    url: "https://www.instagram.com/__itssidney__",
+    handle: "@__itssidney__",
   },
   {
     platform: "LinkedIn",
