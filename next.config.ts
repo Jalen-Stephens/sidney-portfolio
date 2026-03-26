@@ -8,12 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "picsum.photos",
         pathname: "/**",
       },
-      // IMAGEKIT INTEGRATION: Uncomment when connecting ImageKit DAM
-      // {
-      //   protocol: "https",
-      //   hostname: "ik.imagekit.io",
-      //   pathname: "/**",
-      // },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
+      },
     ],
   },
 };

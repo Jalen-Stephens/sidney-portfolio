@@ -37,7 +37,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
-      <body className="min-h-screen flex flex-col antialiased bg-cream text-ink-900">
+      <body
+        suppressHydrationWarning
+        className="min-h-screen flex flex-col antialiased bg-cream text-ink-900"
+      >
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

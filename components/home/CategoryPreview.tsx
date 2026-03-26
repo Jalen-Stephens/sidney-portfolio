@@ -1,20 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { resolveAssetUrl } from "@/lib/assets";
+import { portfolioImages } from "@/data/portfolioImages";
 
 /**
  * "Work by Category" section on the Home page.
  * Shows 4 curated top-level portfolio categories that link into the portfolio explorer.
  *
- * IMAGEKIT SWAP: Replace resolveAssetUrl paths with your ImageKit asset paths.
+ * Uses canonical ImageKit URLs from data/portfolioImages.
  */
 const categories = [
   {
     id: "collections",
     label: "Collections",
     description: "Seasonal collection case studies",
-    // IMAGEKIT SWAP: path "home/category-collections"
-    imageUrl: resolveAssetUrl("home/category-collections", 600, 800),
+    imageUrl: portfolioImages.cover,
     href: "/portfolio?category=collections",
     count: 2,
   },
@@ -22,8 +21,7 @@ const categories = [
     id: "garments",
     label: "Garments",
     description: "Dresses, tops, blazers, and more",
-    // IMAGEKIT SWAP: path "home/category-garments"
-    imageUrl: resolveAssetUrl("home/category-garments", 600, 800),
+    imageUrl: portfolioImages.blumarine.garments[0],
     href: "/portfolio?category=garments",
     count: 10,
   },
@@ -31,8 +29,7 @@ const categories = [
     id: "textiles",
     label: "Textiles",
     description: "Fabric, embroidery & knit research",
-    // IMAGEKIT SWAP: path "home/category-textiles"
-    imageUrl: resolveAssetUrl("home/category-textiles", 600, 800),
+    imageUrl: portfolioImages.aw26.textiles[0],
     href: "/portfolio?category=textiles",
     count: 6,
   },
@@ -40,8 +37,7 @@ const categories = [
     id: "inspiration",
     label: "Inspiration",
     description: "Moodboards & creative references",
-    // IMAGEKIT SWAP: path "home/category-inspiration"
-    imageUrl: resolveAssetUrl("home/category-inspiration", 600, 800),
+    imageUrl: portfolioImages.aw26.inspiration[0],
     href: "/portfolio?category=inspiration",
     count: 3,
   },

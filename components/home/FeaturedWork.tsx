@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { resolveAssetUrl } from "@/lib/assets";
+import { portfolioImages } from "@/data/portfolioImages";
 
 /**
  * Featured work section on the Home page.
  * Highlights the four key portfolio areas as specified in the brief.
  *
- * IMAGEKIT SWAP: Replace resolveAssetUrl paths with your ImageKit asset paths.
+ * Featured items now use the canonical ImageKit map.
  */
 const featuredSections = [
   {
@@ -14,32 +14,28 @@ const featuredSections = [
     title: "Blumarine SS26",
     subtitle: "Spring / Summer 2026",
     href: "/portfolio/collections/blumarine-ss26",
-    // IMAGEKIT SWAP: path "collections/blumarine-ss26/cover"
-    imageUrl: resolveAssetUrl("collections/blumarine-ss26/cover", 600, 800),
+    imageUrl: portfolioImages.blumarine.title[0],
   },
   {
     id: "aw26",
     title: "AW26 Collection",
     subtitle: "Autumn / Winter 2026",
     href: "/portfolio/collections/aw26-collection",
-    // IMAGEKIT SWAP: path "collections/aw26/cover"
-    imageUrl: resolveAssetUrl("collections/aw26/cover", 600, 800),
+    imageUrl: portfolioImages.aw26.concept[0],
   },
   {
     id: "process",
     title: "Process",
     subtitle: "Sketches & Development",
     href: "/portfolio?category=process",
-    // IMAGEKIT SWAP: path "home/featured-process"
-    imageUrl: resolveAssetUrl("home/featured-process", 600, 800),
+    imageUrl: portfolioImages.aw26.process[0],
   },
   {
     id: "technical-flats",
     title: "Technical Flats",
     subtitle: "Technical Drawings",
     href: "/portfolio?category=technical-flats",
-    // IMAGEKIT SWAP: path "home/featured-flats"
-    imageUrl: resolveAssetUrl("home/featured-flats", 600, 800),
+    imageUrl: portfolioImages.aw26.flats[0],
   },
 ];
 
