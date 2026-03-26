@@ -4,13 +4,7 @@ import { useEffect, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { PortfolioItem } from "@/types/portfolio";
-
-const categoryLabels: Record<string, string> = {
-  lookbook: "Lookbook",
-  editorial: "Editorial",
-  campaign: "Campaign",
-  details: "Details",
-};
+import { getItemDisplayLabel } from "@/data/taxonomy";
 
 interface ImageLightboxProps {
   item: PortfolioItem | null;
@@ -37,7 +31,6 @@ export default function ImageLightbox({
     if (hasNext) onNavigate(allItems[currentIndex + 1]);
   }, [hasNext, allItems, currentIndex, onNavigate]);
 
-  // Keyboard navigation
   useEffect(() => {
     if (!item) return;
     const onKey = (e: KeyboardEvent) => {
@@ -49,10 +42,11 @@ export default function ImageLightbox({
     return () => window.removeEventListener("keydown", onKey);
   }, [item, onClose, goPrev, goNext]);
 
-  // Prevent scroll when open
   useEffect(() => {
     document.body.style.overflow = item ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [item]);
 
   return (
@@ -64,41 +58,47 @@ export default function ImageLightbox({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[100] bg-ink-950/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
+          className="fixed inset-0 z-[100] bg-ink-950/92 backdrop-blur-sm flex items-center justify-center p-4 md:p-8"
           onClick={onClose}
         >
-          {/* Close button */}
+          {/* Close */}
           <button
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Close lightbox"
             className="absolute top-5 right-6 text-white/70 hover:text-white text-[11px] tracking-[0.25em] uppercase font-sans transition-colors duration-200 z-10"
           >
             Close ×
           </button>
 
-          {/* Nav — prev */}
+          {/* Prev */}
           {hasPrev && (
             <button
-              onClick={(e) => { e.stopPropagation(); goPrev(); }}
-              aria-label="Previous"
+              onClick={(e) => {
+                e.stopPropagation();
+                goPrev();
+              }}
+              aria-label="Previous image"
               className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-[11px] tracking-[0.2em] uppercase font-sans transition-colors duration-200 z-10"
             >
               ← Prev
             </button>
           )}
 
-          {/* Nav — next */}
+          {/* Next */}
           {hasNext && (
             <button
-              onClick={(e) => { e.stopPropagation(); goNext(); }}
-              aria-label="Next"
+              onClick={(e) => {
+                e.stopPropagation();
+                goNext();
+              }}
+              aria-label="Next image"
               className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-[11px] tracking-[0.2em] uppercase font-sans transition-colors duration-200 z-10"
             >
               Next →
             </button>
           )}
 
-          {/* Content */}
+          {/* Content panel */}
           <motion.div
             key={item.id}
             initial={{ opacity: 0, scale: 0.97 }}
@@ -110,6 +110,7 @@ export default function ImageLightbox({
           >
             {/* Image */}
             <div className="flex-shrink-0 flex items-center justify-center md:max-w-[60%]">
+              {/* IMAGEKIT SWAP: item.imageUrl will use ImageKit URL when env var is set */}
               <Image
                 src={item.imageUrl}
                 alt={item.title}
@@ -124,8 +125,10 @@ export default function ImageLightbox({
             {/* Metadata */}
             <div className="flex flex-col justify-center py-4 md:py-0 md:max-w-[40%]">
               <p className="text-[9px] tracking-[0.28em] uppercase font-sans text-blush-300 mb-4">
-                {categoryLabels[item.category]}
-                {item.year && <span className="ml-3 text-white/30">· {item.year}</span>}
+                {getItemDisplayLabel(item.topLevelCategory, item.subcategory)}
+                {item.year && (
+                  <span className="ml-3 text-white/30">· {item.year}</span>
+                )}
               </p>
               <h2 className="font-display font-light text-white text-2xl md:text-3xl leading-tight mb-5">
                 {item.title}
@@ -134,7 +137,6 @@ export default function ImageLightbox({
                 {item.description}
               </p>
 
-              {/* Tags */}
               {item.tags && item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-6">
                   {item.tags.map((tag) => (
@@ -148,7 +150,6 @@ export default function ImageLightbox({
                 </div>
               )}
 
-              {/* Counter */}
               <p className="mt-8 text-[10px] tracking-[0.18em] font-sans text-white/25">
                 {currentIndex + 1} / {allItems.length}
               </p>

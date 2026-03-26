@@ -22,8 +22,11 @@
   --color-ink-950: #0A0A0A;
   --color-ink-900: #111111;
   --color-ink-700: #2C2C2C;
+  --color-ink-600: #444444;
   --color-ink-500: #6B6B6B;
+  --color-ink-400: #888888;
   --color-ink-300: #9D9D9D;
+  --color-ink-200: #C8C4C0;
   --color-ink-100: #E8E4E0;
   --color-ink-50:  #F5F3F0;
 
@@ -107,6 +110,14 @@ h1, h2, h3, h4 {
 .delay-400 { animation-delay: 400ms; }
 .delay-600 { animation-delay: 600ms; }
 .delay-800 { animation-delay: 800ms; }
+
+/* ── Scrollbar hide utility ──────────────────────────────── */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 
 /* ── Masonry grid ────────────────────────────────────────── */
 .masonry-grid {

@@ -1,12 +1,6 @@
 import Image from "next/image";
 import type { PortfolioItem } from "@/types/portfolio";
-
-const categoryLabels: Record<string, string> = {
-  lookbook: "Lookbook",
-  editorial: "Editorial",
-  campaign: "Campaign",
-  details: "Details",
-};
+import { getItemDisplayLabel } from "@/data/taxonomy";
 
 interface GalleryCardProps {
   item: PortfolioItem;
@@ -14,14 +8,16 @@ interface GalleryCardProps {
 }
 
 export default function GalleryCard({ item, onClick }: GalleryCardProps) {
+  const label = getItemDisplayLabel(item.topLevelCategory, item.subcategory);
+
   return (
     <button
       onClick={() => onClick(item)}
       className="group relative block w-full text-left overflow-hidden bg-blush-50 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blush-400 focus-visible:ring-offset-2"
       aria-label={`Open ${item.title}`}
     >
-      {/* Image */}
       <div className="relative overflow-hidden">
+        {/* IMAGEKIT SWAP: swap item.imageUrl with ImageKit-generated URL when env var is set */}
         <Image
           src={item.imageUrl}
           alt={item.title}
@@ -32,13 +28,13 @@ export default function GalleryCard({ item, onClick }: GalleryCardProps) {
           loading="lazy"
         />
 
-        {/* Hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-950/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-350 pointer-events-none" />
+        {/* Hover gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-ink-950/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-        {/* Hover content */}
+        {/* Hover caption */}
         <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
           <p className="text-[9px] tracking-[0.22em] uppercase font-sans text-blush-300 mb-1">
-            {categoryLabels[item.category]}
+            {label}
           </p>
           <p className="font-display text-white text-base font-light leading-tight">
             {item.title}

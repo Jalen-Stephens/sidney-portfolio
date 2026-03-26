@@ -6,7 +6,7 @@ import { portfolioItems } from "@/data/portfolio";
 export const metadata: Metadata = {
   title: "Portfolio — Sidney Riojas",
   description:
-    "Lookbooks, editorial shoots, campaigns, and detailed craft work by fashion designer Sidney Riojas.",
+    "Collections, garments, accessories, process work, textiles, inspiration, and technical flats by fashion designer Sidney Riojas.",
 };
 
 export default function PortfolioPage() {
@@ -22,7 +22,7 @@ export default function PortfolioPage() {
         </h1>
       </div>
 
-      {/* Gallery — wrapped in Suspense for useSearchParams() */}
+      {/* Gallery explorer — wrapped in Suspense for useSearchParams() */}
       <Suspense>
         <MasonryGallery items={portfolioItems} />
       </Suspense>

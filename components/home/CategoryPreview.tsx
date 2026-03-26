@@ -2,34 +2,48 @@ import Image from "next/image";
 import Link from "next/link";
 import { resolveAssetUrl } from "@/lib/assets";
 
+/**
+ * "Work by Category" section on the Home page.
+ * Shows 4 curated top-level portfolio categories that link into the portfolio explorer.
+ *
+ * IMAGEKIT SWAP: Replace resolveAssetUrl paths with your ImageKit asset paths.
+ */
 const categories = [
   {
-    id: "lookbook",
-    label: "Lookbook",
-    description: "Seasonal collections and editorial campaigns",
-    imageUrl: resolveAssetUrl("home/category-lookbook", 600, 800),
+    id: "collections",
+    label: "Collections",
+    description: "Seasonal collection case studies",
+    // IMAGEKIT SWAP: path "home/category-collections"
+    imageUrl: resolveAssetUrl("home/category-collections", 600, 800),
+    href: "/portfolio?category=collections",
+    count: 2,
+  },
+  {
+    id: "garments",
+    label: "Garments",
+    description: "Dresses, tops, blazers, and more",
+    // IMAGEKIT SWAP: path "home/category-garments"
+    imageUrl: resolveAssetUrl("home/category-garments", 600, 800),
+    href: "/portfolio?category=garments",
+    count: 10,
+  },
+  {
+    id: "textiles",
+    label: "Textiles",
+    description: "Fabric, embroidery & knit research",
+    // IMAGEKIT SWAP: path "home/category-textiles"
+    imageUrl: resolveAssetUrl("home/category-textiles", 600, 800),
+    href: "/portfolio?category=textiles",
     count: 6,
   },
   {
-    id: "editorial",
-    label: "Editorial",
-    description: "Magazine features and artistic stories",
-    imageUrl: resolveAssetUrl("home/category-editorial", 600, 800),
-    count: 5,
-  },
-  {
-    id: "campaign",
-    label: "Campaign",
-    description: "Brand campaigns and commercial work",
-    imageUrl: resolveAssetUrl("home/category-campaign", 600, 800),
-    count: 5,
-  },
-  {
-    id: "details",
-    label: "Details",
-    description: "Craft, construction, and material studies",
-    imageUrl: resolveAssetUrl("home/category-details", 600, 800),
-    count: 4,
+    id: "inspiration",
+    label: "Inspiration",
+    description: "Moodboards & creative references",
+    // IMAGEKIT SWAP: path "home/category-inspiration"
+    imageUrl: resolveAssetUrl("home/category-inspiration", 600, 800),
+    href: "/portfolio?category=inspiration",
+    count: 3,
   },
 ];
 
@@ -52,11 +66,11 @@ export default function CategoryPreview() {
           {categories.map((cat) => (
             <Link
               key={cat.id}
-              href={`/portfolio?category=${cat.id}`}
+              href={cat.href}
               className="group relative block overflow-hidden"
             >
               {/* Image */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-blush-100">
+              <div className="relative aspect-3/4 overflow-hidden bg-blush-100">
                 <Image
                   src={cat.imageUrl}
                   alt={cat.label}
@@ -64,8 +78,8 @@ export default function CategoryPreview() {
                   sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.05]"
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/10 to-transparent" />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-ink-950/70 via-ink-950/10 to-transparent" />
 
                 {/* Text */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
@@ -73,7 +87,7 @@ export default function CategoryPreview() {
                     {cat.label}
                   </p>
                   <p className="text-[9px] tracking-[0.2em] uppercase font-sans text-blush-200 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {cat.count} works
+                    {cat.count} {cat.count === 1 ? "work" : "works"}
                   </p>
                 </div>
               </div>
