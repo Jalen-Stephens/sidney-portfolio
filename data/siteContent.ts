@@ -23,24 +23,24 @@ export const designer = {
   title: "Fashion Designer",
   location: "New York, NY",
   email: "sidneyriojas394@gmail.com",
-  bio: "Sidney Riojas is a multidisciplinary fashion designer based in New York. Trained at Parsons School of Design, Sidney's work explores the dialogue between structure and softness, tradition and innovation.",
+  bio: "Sidney Riojas is a fashion designer based in New York with hands-on experience across bridal styling, apparel design internships, and technical product development.",
   bioExtended:
-    "Each collection is a meditation on the body in space — how clothing can be both armor and revelation. Working primarily in natural fibers and responsible textiles, Sidney approaches design as a form of research, drawing from architecture, minimalist art, and the lived experience of the female body across cultures.",
+    "She earned a Bachelor of Arts in Fashion Design from Kent State University and has contributed to outerwear and travel accessories development through internships at iApparel Brands and TravelPro. Her background combines trend research, tech pack execution, and presentation-ready visual storytelling.",
   philosophy:
-    "Fashion begins not with trend but with touch — the weight of a fabric, the resistance of a seam. I design to outlast seasons.",
-  // IMAGEKIT SWAP: Replace path string with asset path in your ImageKit library
-  portraitUrl: "https://ik.imagekit.io/xajzoz300/portfolio/sidney-about.png",
-  heroImageUrl: resolveAssetUrl("home/hero-editorial", 900, 1100),
-  aboutImageUrl: resolveAssetUrl("about/studio", 1000, 700),
+    "I design with equal focus on fit, function, and visual impact, shaping pieces that communicate a clear point of view while remaining practical to wear.",
+  // Headshot provided by client
+  portraitUrl: "https://ik.imagekit.io/xajzoz300/portfolio/Sidney-headshot.JPG",
+  heroImageUrl: "https://ik.imagekit.io/xajzoz300/portfolio/Sidney-headshot.JPG",
+  aboutImageUrl: "https://ik.imagekit.io/xajzoz300/portfolio/Sidney-headshot.JPG",
 };
 
 // ── Social links ─────────────────────────────────────────────────────────────
 
 export const socialLinks: SocialLink[] = [
   {
-    platform: "Instagram",
-    url: "https://www.instagram.com/__itssidney__",
-    handle: "@__itssidney__",
+    platform: "Behance",
+    url: "https://www.behance.net/sidneyriojas1",
+    handle: "sidneyriojas1",
   },
   {
     platform: "LinkedIn",
@@ -59,17 +59,10 @@ export const socialLinks: SocialLink[] = [
 export const education: ResumeEducation[] = [
   {
     id: "edu-01",
-    degree: "MFA Fashion Design",
-    institution: "Parsons School of Design",
-    period: "2017 — 2019",
-    location: "New York, NY",
-  },
-  {
-    id: "edu-02",
-    degree: "BFA Textile Design",
-    institution: "Rhode Island School of Design",
-    period: "2012 — 2016",
-    location: "Providence, RI",
+    degree: "Bachelor of Arts, Fashion Design",
+    institution: "Kent State University",
+    period: "Graduated August 2025",
+    location: "Kent, Ohio",
   },
 ];
 
@@ -78,27 +71,43 @@ export const education: ResumeEducation[] = [
 export const experience: ResumeExperience[] = [
   {
     id: "exp-01",
-    title: "Lead Womenswear Designer",
-    company: "Maison Calloway",
-    period: "2022 — Present",
+    title: "Bridal Stylist",
+    company: "Anthropologie Weddings",
+    period: "March 2026 — Present",
     description:
-      "Oversee full creative direction for womenswear collections from concept through production. Lead a team of six designers and collaborate with international fabricators and European mills.",
+      "Deliver one-on-one styling experiences for brides, bridal parties, and guests while building client relationships through outreach, appointment generation, and follow-up.",
   },
   {
     id: "exp-02",
-    title: "Designer",
-    company: "Studio Voss",
-    period: "2019 — 2022",
+    title: "Fashion Design Intern",
+    company: "iApparel Brands, New York, NY",
+    period: "June 2025 — August 2025",
     description:
-      "Developed seasonal collections with an emphasis on sustainable production and artisan techniques. Managed relationships with atelier partners in France and Italy.",
+      "Designed and presented an Autumn/Winter outerwear collection, collaborated on visual concepts, and used trend research to execute designs aligned to brand identity.",
   },
   {
     id: "exp-03",
-    title: "Design Intern",
-    company: "Proenza Schouler",
-    period: "2018",
+    title: "Product Design Intern",
+    company: "TravelPro Products Inc., Boca Raton, FL",
+    period: "May 2024 — August 2024",
     description:
-      "Assisted with pattern development, fabric sourcing, and runway preparation for the AW18 collection.",
+      "Supported accessory color matching, reviewed material and trim submits, and created technical documentation while designing and presenting a Spring/Summer travel bag collection.",
+  },
+  {
+    id: "exp-04",
+    title: "Sales Associate",
+    company: "Calvin Klein, Aurora, OH",
+    period: "January 2024 — May 2024",
+    description:
+      "Designed in-store displays using seasonal floor plans, advised customers on styling, and helped maintain a strong customer-facing retail environment.",
+  },
+  {
+    id: "exp-05",
+    title: "Sewing Instructor",
+    company: "Petite Designers, Parkland, FL",
+    period: "June 2023 — August 2023",
+    description:
+      "Taught students ages 7-15 core sewing and fashion design skills, guided weekly projects, and coached draping and presentation techniques for fashion shows.",
   },
 ];
 
@@ -106,33 +115,32 @@ export const experience: ResumeExperience[] = [
 
 export const skills: SkillGroup[] = [
   {
-    category: "Design",
+    category: "Software",
     items: [
-      "Pattern Drafting",
-      "Draping & Fitting",
-      "Collection Development",
-      "Trend Forecasting",
-      "Technical Drawing",
-    ],
-  },
-  {
-    category: "Technical",
-    items: [
-      "CLO 3D",
-      "Adobe Illustrator",
       "Adobe Photoshop",
-      "AutoCAD",
-      "Browzwear",
+      "Adobe Illustrator",
+      "Adobe InDesign",
+      "Procreate",
+      "CLO 3D",
+      "Microsoft Excel",
     ],
   },
   {
-    category: "Textile",
+    category: "Equipment",
     items: [
-      "Fabric Sourcing",
-      "Textile Research",
-      "Sustainable Materials",
-      "Knit & Weave",
-      "Surface Embellishment",
+      "Laser Cutter",
+      "Embroidery Machine",
+      "Industrial Sewing Machine",
+    ],
+  },
+  {
+    category: "Practice",
+    items: [
+      "Collection Presentation",
+      "Trend Research",
+      "Tech Pack Development",
+      "Color Matching",
+      "Client Styling",
     ],
   },
 ];
@@ -142,39 +150,33 @@ export const skills: SkillGroup[] = [
 export const exhibitions: Exhibition[] = [
   {
     id: "ex-01",
-    title: "CFDA Emerging Designer Showcase",
-    venue: "New York Fashion Week",
-    year: "2023",
+    title: "Autumn/Winter Outerwear Collection Presentation",
+    venue: "iApparel Brands Design + Sales Team",
+    year: "2025",
   },
   {
     id: "ex-02",
-    title: "Guest Designer",
-    venue: "Paris Fashion Week",
-    year: "2022",
+    title: "Spring/Summer Travel Bags Collection Presentation",
+    venue: "TravelPro Design + Marketing Team",
+    year: "2024",
   },
   {
     id: "ex-03",
-    title: '"Form & Function" Group Exhibition',
-    venue: "MoMA PS1, New York",
-    year: "2021",
-  },
-  {
-    id: "ex-04",
-    title: "Graduate Collection — Best in Show",
-    venue: "Parsons Fashion Benefit",
-    year: "2019",
+    title: "Student Fashion Show Project Mentorship",
+    venue: "Petite Designers",
+    year: "2023",
   },
 ];
 
 // ── About page inspiration ───────────────────────────────────────────────────
 
 export const inspirations = [
-  "Rei Kawakubo",
-  "Madeleine Vionnet",
-  "Agnes Martin",
-  "Donald Judd",
-  "Kazuyo Sejima",
-  "Peter Zumthor",
+  "Bridal Styling",
+  "Outerwear Development",
+  "Technical Design",
+  "Trend Research",
+  "Color Theory",
+  "Sewing Education",
 ];
 
 export const aboutImages = [
