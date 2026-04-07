@@ -31,7 +31,7 @@ export default function ResumeSections() {
 
         {/* Download button */}
         <a
-          href="https://ik.imagekit.io/xajzoz300/portfolio/Riojas_Sidney_Resume_2026.pdf?ik-attachment=true"
+          href="https://ik.imagekit.io/xajzoz300/portfolio/Riojas_Sidney_Resume_2026-2.pdf?ik-attachment=true"
           className="inline-flex items-center gap-2 px-6 py-3 border border-ink-900 text-ink-900 text-[10px] tracking-[0.2em] uppercase font-sans hover:bg-ink-900 hover:text-cream transition-all duration-300 self-start md:self-auto"
         >
           Download PDF
