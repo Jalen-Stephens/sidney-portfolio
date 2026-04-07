@@ -180,6 +180,6 @@ export const inspirations = [
 ];
 
 export const aboutImages = [
-  resolveAssetUrl("about/atelier-01", 600, 750),
+  "https://ik.imagekit.io/xajzoz300/portfolio/sidney-about.png?updatedAt=1774550925423",
   resolveAssetUrl("about/atelier-02", 600, 500),
 ];
