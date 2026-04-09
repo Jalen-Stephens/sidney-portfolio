@@ -14,7 +14,7 @@ const featuredSections = [
     title: "Grit/Glamour S/S 2026",
     subtitle: "Spring / Summer 2026",
     href: "/portfolio/collections/blumarine-ss26",
-    imageUrl: portfolioImages.blumarine.looks[0],
+    imageUrl: portfolioImages.blumarine.title[0],
   },
   {
     id: "aw26",

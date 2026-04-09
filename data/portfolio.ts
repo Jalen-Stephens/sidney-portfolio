@@ -46,7 +46,7 @@ export const collections: CollectionMeta[] = [
     year: 2026,
     description:
       "A more colorful, pink-forward direction where romantic textures meet bold, modern styling.",
-    coverImageUrl: portfolioImages.blumarine.looks[0],
+    coverImageUrl: portfolioImages.blumarine.title[0],
     coverImageWidth: 1200,
     coverImageHeight: 800,
     coverAlt: "Grit/Glamour S/S 2026 Collection",
