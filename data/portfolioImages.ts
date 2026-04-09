@@ -5,7 +5,7 @@ export const portfolioImages = {
       "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/moodboards/blumarine-moodboard-01.png",
     ],
     title: [
-      "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/title/blumarine-title-01.png",
+      "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/grit_title_page.png",
     ],
     lineup: [
       "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/lineup/blumarine-lineup-01.png",
@@ -21,6 +21,9 @@ export const portfolioImages = {
     handbags: [
       "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/handbags/blumarine-handbag-01.png",
       "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/handbags/blumarine-handbag-02.png",
+      "https://ik.imagekit.io/xajzoz300/portfolio/bags/Alegreya%20Sans.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/bags/Simone%20Mini.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/bags/Hush%20Tote%20Bag%20Close%20Up.jpg",
     ],
     textiles: [
       "https://ik.imagekit.io/xajzoz300/portfolio/blumarine/textiles/blumarine-textiles-01.png",
@@ -71,13 +74,12 @@ export const portfolioImages = {
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/bag-process/aw26-bag-process-02.png",
     ],
     looks: [
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-01.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-02.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-03.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-04.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-05.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-06.png",
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/looks/aw26-look-07.png",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-01.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-02.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-03.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-04.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-05.jpg",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-06.jpg",
     ],
     textiles: [
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/textiles/aw26-knit-dress-development-01.png",
@@ -99,7 +101,7 @@ export const portfolioImages = {
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/inspiration/aw26-inspiration-04.png",
     ],
     concept: [
-      "https://ik.imagekit.io/xajzoz300/portfolio/aw26/concept/aw26-title-01.png",
+      "https://ik.imagekit.io/xajzoz300/portfolio/refined%20aw26/refined-aw26-look-03.jpg?updatedAt=1775755631479",
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/concept/aw26-target-market-01.png",
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/concept/aw26-concept-development-01.png",
       "https://ik.imagekit.io/xajzoz300/portfolio/aw26/concept/aw26-concept-development-02.png",

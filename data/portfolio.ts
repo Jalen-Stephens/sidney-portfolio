@@ -41,19 +41,19 @@ function makeItem(input: {
 export const collections: CollectionMeta[] = [
   {
     slug: "blumarine-ss26",
-    title: "Blumarine SS26",
+    title: "Grit/Glamour S/S 2026",
     season: "Spring / Summer 2026",
     year: 2026,
     description:
-      "A feminine ode to garden romanticism. Intricate floral embroidery meets fluid organza.",
-    coverImageUrl: portfolioImages.blumarine.title[0],
+      "A more colorful, pink-forward direction where romantic textures meet bold, modern styling.",
+    coverImageUrl: portfolioImages.blumarine.looks[0],
     coverImageWidth: 1200,
     coverImageHeight: 800,
-    coverAlt: "Blumarine SS26 Collection",
+    coverAlt: "Grit/Glamour S/S 2026 Collection",
   },
   {
     slug: "aw26-collection",
-    title: "AW26 Collection",
+    title: "Refined A/W 2026",
     season: "Autumn / Winter 2026",
     year: 2026,
     description:
@@ -69,20 +69,20 @@ const blumarineCollectionItems: PortfolioItem[] = [
   ...portfolioImages.blumarine.looks.map((url, i) =>
     makeItem({
       id: `bl-lk-${String(i + 1).padStart(2, "0")}`,
-      title: `Look ${String(i + 1).padStart(2, "0")} — Blumarine SS26`,
+      title: `Look ${String(i + 1).padStart(2, "0")} — Grit/Glamour S/S 2026`,
       slug: `blumarine-ss26-look-${String(i + 1).padStart(2, "0")}`,
       topLevelCategory: "collections",
       subcategory: "looks",
       collection: "blumarine-ss26",
       imageUrl: url,
       featured: i === 0,
-      tags: ["blumarine", "looks"],
+      tags: ["grit-glamour", "looks"],
     })
   ),
   ...portfolioImages.blumarine.process.map((url, i) =>
     makeItem({
       id: `bl-pr-${String(i + 1).padStart(2, "0")}`,
-      title: `Process ${String(i + 1).padStart(2, "0")} — Blumarine SS26`,
+      title: `Process ${String(i + 1).padStart(2, "0")} — Grit/Glamour S/S 2026`,
       slug: `blumarine-ss26-process-${String(i + 1).padStart(2, "0")}`,
       topLevelCategory: "collections",
       subcategory: "process",
@@ -90,7 +90,7 @@ const blumarineCollectionItems: PortfolioItem[] = [
       imageUrl: url,
       imageWidth: defaultDims.landscape.w,
       imageHeight: defaultDims.landscape.h,
-      tags: ["blumarine", "process"],
+      tags: ["grit-glamour", "process"],
     })
   ),
 ];

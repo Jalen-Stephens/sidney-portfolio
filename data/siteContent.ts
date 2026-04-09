@@ -23,7 +23,7 @@ export const designer = {
   title: "Fashion Designer",
   location: "New York, NY",
   email: "sidneyriojas394@gmail.com",
-  bio: "Sidney Riojas is a fashion designer based in New York with hands-on experience across bridal styling, apparel design internships, and technical product development.",
+  bio: "Design with intention, create with love and humanity in mind.",
   bioExtended:
     "She earned a Bachelor of Arts in Fashion Design from Kent State University and has contributed to outerwear and travel accessories development through internships at iApparel Brands and TravelPro. Her background combines trend research, tech pack execution, and presentation-ready visual storytelling.",
   philosophy:

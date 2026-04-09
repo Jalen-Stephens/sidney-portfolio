@@ -11,14 +11,14 @@ import { portfolioImages } from "@/data/portfolioImages";
 const featuredSections = [
   {
     id: "blumarine-ss26",
-    title: "Blumarine SS26",
+    title: "Grit/Glamour S/S 2026",
     subtitle: "Spring / Summer 2026",
     href: "/portfolio/collections/blumarine-ss26",
-    imageUrl: portfolioImages.blumarine.title[0],
+    imageUrl: portfolioImages.blumarine.looks[0],
   },
   {
     id: "aw26",
-    title: "AW26 Collection",
+    title: "Refined A/W 2026",
     subtitle: "Autumn / Winter 2026",
     href: "/portfolio/collections/aw26-collection",
     imageUrl: portfolioImages.aw26.concept[0],
