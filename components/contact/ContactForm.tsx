@@ -1,32 +1,9 @@
-"use client";
-
-import { useState } from "react";
 import { designer, socialLinks } from "@/data/siteContent";
 
-type FormState = "idle" | "submitting" | "success" | "error";
-
 export default function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [state, setState] = useState<FormState>("idle");
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setState("submitting");
-    // PLACEHOLDER: Wire up your email service (Resend, SendGrid, Formspree, etc.)
-    // Example: await fetch('/api/contact', { method: 'POST', body: JSON.stringify(form) });
-    await new Promise((r) => setTimeout(r, 1000));
-    setState("success");
-    setForm({ name: "", email: "", subject: "", message: "" });
-  };
-
-  const inputClass =
-    "w-full px-0 py-3 bg-transparent border-0 border-b border-ink-100 text-ink-900 font-sans text-sm placeholder:text-ink-300 focus:outline-none focus:border-ink-900 transition-colors duration-200";
+  const mailtoHref = `mailto:${designer.email}?subject=${encodeURIComponent(
+    "Portfolio inquiry"
+  )}`;
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-24 md:pb-32">
@@ -95,107 +72,23 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* ── Right: Form ─────────────────────────────────────────────────── */}
-        <div>
-          {state === "success" ? (
-            <div className="flex flex-col items-start justify-center h-full py-10">
-              <div className="w-8 h-px bg-blush-300 mb-8" />
-              <p className="font-display font-light text-3xl text-ink-900 mb-4">
-                Message received.
-              </p>
-              <p className="font-sans text-ink-500 text-sm leading-relaxed max-w-sm">
-                Thank you for reaching out. I&rsquo;ll be in touch within 2–3 business days.
-              </p>
-              <button
-                onClick={() => setState("idle")}
-                className="mt-10 text-[11px] tracking-[0.2em] uppercase font-sans text-ink-400 hover:text-ink-900 transition-colors duration-200"
-              >
-                Send another →
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-8" noValidate>
-              {/* Name */}
-              <div>
-                <label className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-400 block mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Your full name"
-                  className={inputClass}
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-400 block mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="your@email.com"
-                  className={inputClass}
-                />
-              </div>
-
-              {/* Subject */}
-              <div>
-                <label className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-400 block mb-2">
-                  Subject
-                </label>
-                <select
-                  name="subject"
-                  value={form.subject}
-                  onChange={handleChange}
-                  className={`${inputClass} cursor-pointer`}
-                >
-                  <option value="">Select a topic</option>
-                  <option value="collaboration">Collaboration</option>
-                  <option value="consulting">Design Consulting</option>
-                  <option value="editorial">Editorial Project</option>
-                  <option value="press">Press Inquiry</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              {/* Message */}
-              <div>
-                <label className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-400 block mb-2">
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Tell me about your project..."
-                  className={`${inputClass} resize-none`}
-                />
-              </div>
-
-              {/* Submit */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={state === "submitting"}
-                  className="inline-flex items-center gap-3 px-8 py-3.5 bg-ink-900 text-cream text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {state === "submitting" ? "Sending..." : "Send Message"}
-                  {state !== "submitting" && <span>→</span>}
-                </button>
-              </div>
-            </form>
-          )}
+        {/* ── Right: Mailto CTA ───────────────────────────────────────────── */}
+        <div className="flex flex-col items-start justify-center border-t border-ink-100 pt-10 md:border-t-0 md:border-l md:pl-16 md:pt-0">
+          <div className="w-8 h-px bg-blush-300 mb-8" />
+          <p className="font-display font-light text-3xl text-ink-900 mb-4">
+            Start a conversation.
+          </p>
+          <p className="font-sans text-ink-500 text-sm leading-relaxed max-w-sm mb-10">
+            Send a note with your project details, timeline, and any relevant
+            references.
+          </p>
+          <a
+            href={mailtoHref}
+            className="inline-flex items-center gap-3 px-8 py-3.5 bg-ink-900 text-cream text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors duration-300"
+          >
+            Email Sidney
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
     </div>

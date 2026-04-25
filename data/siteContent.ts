@@ -5,7 +5,6 @@
  * Image URLs flow through resolveAssetUrl() for future ImageKit integration.
  */
 
-import { resolveAssetUrl } from "@/lib/assets";
 import type {
   ResumeEducation,
   ResumeExperience,
@@ -181,5 +180,4 @@ export const inspirations = [
 
 export const aboutImages = [
   "https://ik.imagekit.io/xajzoz300/portfolio/sidney-about.png?updatedAt=1774550925423",
-  resolveAssetUrl("about/atelier-02", 600, 500),
 ];
