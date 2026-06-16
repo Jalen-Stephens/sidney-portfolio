@@ -1,8 +1,25 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { updateItem, deleteItem } from "@/lib/admin/actions";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  arrayMove,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { updateItem, deleteItem, reorderItems } from "@/lib/admin/actions";
 import { TOP_LEVEL_TAXONOMY } from "@/data/taxonomy";
 import type { PortfolioItem, CollectionMeta } from "@/types/portfolio";
 
@@ -12,25 +29,60 @@ interface ItemTableProps {
 }
 
 export default function ItemTable({ items, collections }: ItemTableProps) {
+  const router = useRouter();
+  const [rows, setRows] = useState(items);
+  const [savingOrder, startOrder] = useTransition();
+
+  // Keep local order in sync when the server data changes (after edits/uploads).
+  useEffect(() => setRows(items), [items]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function onDragEnd(e: DragEndEvent) {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    setRows((prev) => {
+      const oldI = prev.findIndex((r) => r.id === active.id);
+      const newI = prev.findIndex((r) => r.id === over.id);
+      const next = arrayMove(prev, oldI, newI);
+      startOrder(async () => {
+        await reorderItems(next.map((r) => r.id));
+        router.refresh();
+      });
+      return next;
+    });
+  }
+
   return (
     <section>
       <div className="flex items-baseline justify-between mb-5">
         <h2 className="font-display text-2xl font-light text-ink-900">All work</h2>
         <p className="text-[11px] tracking-[0.14em] uppercase font-sans text-ink-400">
-          {items.length} items
+          {rows.length} items{savingOrder ? " · saving order…" : " · drag ⠿ to reorder"}
         </p>
       </div>
-      <div className="space-y-3">
-        {items.map((item) => (
-          <ItemRow key={item.id} item={item} collections={collections} />
-        ))}
-      </div>
+
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+        <SortableContext items={rows.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+          <div className="space-y-3">
+            {rows.map((item) => (
+              <ItemRow key={item.id} item={item} collections={collections} />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
     </section>
   );
 }
 
 function ItemRow({ item, collections }: { item: PortfolioItem; collections: CollectionMeta[] }) {
   const router = useRouter();
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: item.id,
+  });
   const [title, setTitle] = useState(item.title);
   const [description, setDescription] = useState(item.description);
   const [category, setCategory] = useState(item.topLevelCategory);
@@ -73,8 +125,30 @@ function ItemRow({ item, collections }: { item: PortfolioItem; collections: Coll
     });
   }
 
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.6 : 1,
+    zIndex: isDragging ? 10 : undefined,
+  };
+
   return (
-    <div className="flex gap-4 border border-ink-100 p-3">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex gap-3 border border-ink-100 p-3 bg-cream"
+    >
+      {/* Drag handle */}
+      <button
+        type="button"
+        aria-label="Drag to reorder"
+        className="flex-shrink-0 self-stretch px-1.5 flex items-center text-ink-300 hover:text-ink-700 cursor-grab active:cursor-grabbing touch-none"
+        {...attributes}
+        {...listeners}
+      >
+        ⠿
+      </button>
+
       {/* Thumbnail */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
