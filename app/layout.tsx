@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { getSiteContent } from "@/lib/db/site-content";
 
 /** Canonical site origin for metadata (Open Graph, etc.). Set in Vercel: NEXT_PUBLIC_SITE_URL=https://your-domain.com */
 function siteUrl(): string {
@@ -13,9 +14,6 @@ function siteUrl(): string {
   }
   return "http://localhost:3000";
 }
-
-const ogImageUrl =
-  "https://ik.imagekit.io/xajzoz300/portfolio/Sidney-headshot.JPG?tr=w-1200,h-630,c-fill,fo-face,q-85,f-auto";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -32,35 +30,32 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl()),
-  title: "Sidney Riojas — Fashion Designer",
-  description:
-    "Portfolio of Sidney Riojas, fashion designer based in New York. Lookbooks, editorial work, and campaign imagery.",
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteContent();
+  const ogImage = site.heroImageUrl;
+  return {
+    metadataBase: new URL(siteUrl()),
     title: "Sidney Riojas — Fashion Designer",
     description:
-      "Fashion design portfolio — collections, bridal styling, outerwear, and technical development.",
-    type: "website",
-    locale: "en_US",
-    siteName: "Sidney Riojas",
-    images: [
-      {
-        url: ogImageUrl,
-        width: 1200,
-        height: 630,
-        alt: "Sidney Riojas — Fashion Designer",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Sidney Riojas — Fashion Designer",
-    description:
-      "Fashion design portfolio — collections, bridal styling, outerwear, and technical development.",
-    images: [ogImageUrl],
-  },
-};
+      "Portfolio of Sidney Riojas, fashion designer based in New York. Lookbooks, editorial work, and campaign imagery.",
+    openGraph: {
+      title: "Sidney Riojas — Fashion Designer",
+      description:
+        "Fashion design portfolio — collections, bridal styling, outerwear, and technical development.",
+      type: "website",
+      locale: "en_US",
+      siteName: "Sidney Riojas",
+      images: [{ url: ogImage, alt: "Sidney Riojas — Fashion Designer" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Sidney Riojas — Fashion Designer",
+      description:
+        "Fashion design portfolio — collections, bridal styling, outerwear, and technical development.",
+      images: [ogImage],
+    },
+  };
+}
 
 export default function RootLayout({
   children,
