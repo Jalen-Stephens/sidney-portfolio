@@ -1,7 +1,22 @@
 import Image from "next/image";
-import { designer, inspirations, aboutImages } from "@/data/siteContent";
 
-export default function AboutIntro() {
+interface AboutIntroProps {
+  portraitUrl: string;
+  bio: string;
+  bioExtended: string;
+  philosophy: string;
+  inspirations: string[];
+  aboutImages: string[];
+}
+
+export default function AboutIntro({
+  portraitUrl,
+  bio,
+  bioExtended,
+  philosophy,
+  inspirations,
+  aboutImages,
+}: AboutIntroProps) {
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-10">
       {/* ── Hero row: portrait + bio ───────────────────────────────────────── */}
@@ -10,7 +25,7 @@ export default function AboutIntro() {
         <div className="w-full md:w-[38%] flex-shrink-0">
           <div className="relative aspect-[3/4] overflow-hidden bg-blush-100">
             <Image
-              src={designer.portraitUrl}
+              src={portraitUrl}
               alt="Sidney Riojas"
               fill
               priority
@@ -38,10 +53,10 @@ export default function AboutIntro() {
           </h1>
 
           <p className="font-sans font-light text-ink-600 text-base md:text-lg leading-relaxed max-w-xl mb-6">
-            {designer.bio}
+            {bio}
           </p>
           <p className="font-sans font-light text-ink-500 text-base leading-relaxed max-w-xl">
-            {designer.bioExtended}
+            {bioExtended}
           </p>
 
           {/* Divider */}
@@ -50,7 +65,7 @@ export default function AboutIntro() {
           {/* Philosophy */}
           <blockquote className="border-l-2 border-blush-300 pl-6">
             <p className="font-display italic text-2xl md:text-3xl font-light text-ink-700 leading-snug">
-              &ldquo;{designer.philosophy}&rdquo;
+              &ldquo;{philosophy}&rdquo;
             </p>
           </blockquote>
         </div>

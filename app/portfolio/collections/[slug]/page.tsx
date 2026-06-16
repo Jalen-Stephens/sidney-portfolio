@@ -2,8 +2,11 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getCollection, itemsByCollection } from "@/data/portfolio";
-import { collections } from "@/data/portfolio";
+import {
+  getCollection,
+  getItemsByCollection,
+  getAllCollections,
+} from "@/lib/db/queries";
 import CollectionGallery from "@/components/portfolio/CollectionGallery";
 
 // Next.js 15+: params is now a Promise and must be awaited
@@ -12,12 +15,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
+  const collections = await getAllCollections();
   return collections.map((col) => ({ slug: col.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const col = getCollection(slug);
+  const col = await getCollection(slug);
   if (!col) return { title: "Collection Not Found — Sidney Riojas" };
   return {
     title: `${col.title} — Sidney Riojas`,
@@ -27,11 +31,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CollectionPage({ params }: Props) {
   const { slug } = await params;
-  const col = getCollection(slug);
+  const col = await getCollection(slug);
   if (!col) notFound();
 
-  // IMAGEKIT SWAP: col.coverImageUrl will resolve to ImageKit URL when env var is set
-  const items = itemsByCollection(slug);
+  const items = await getItemsByCollection(slug);
   const looks = items.filter((i) => i.subcategory === "looks");
   const process = items.filter((i) => i.subcategory === "process");
   const flats = items.filter((i) => i.subcategory === "technical-flats");

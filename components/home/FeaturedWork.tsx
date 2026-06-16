@@ -1,45 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { portfolioImages } from "@/data/portfolioImages";
+import type { FeaturedSection } from "@/lib/home-content";
 
 /**
  * Featured work section on the Home page.
- * Highlights the four key portfolio areas as specified in the brief.
- *
- * Featured items now use the canonical ImageKit map.
+ * Highlights the two collections plus key portfolio areas. Imagery and links
+ * are derived from the database (see lib/home-content.ts).
  */
-const featuredSections = [
-  {
-    id: "blumarine-ss26",
-    title: "Grit/Glamour S/S 2026",
-    subtitle: "Spring / Summer 2026",
-    href: "/portfolio/collections/blumarine-ss26",
-    imageUrl: portfolioImages.blumarine.title[0],
-  },
-  {
-    id: "aw26",
-    title: "Refined A/W 2026",
-    subtitle: "Autumn / Winter 2026",
-    href: "/portfolio/collections/aw26-collection",
-    imageUrl: portfolioImages.aw26.concept[0],
-  },
-  {
-    id: "process",
-    title: "Process",
-    subtitle: "Sketches & Development",
-    href: "/portfolio?category=process",
-    imageUrl: portfolioImages.aw26.process[0],
-  },
-  {
-    id: "technical-flats",
-    title: "Technical Flats",
-    subtitle: "Technical Drawings",
-    href: "/portfolio?category=technical-flats",
-    imageUrl: portfolioImages.aw26.flats[0],
-  },
-];
+interface FeaturedWorkProps {
+  sections: FeaturedSection[];
+}
 
-export default function FeaturedWork() {
+export default function FeaturedWork({ sections }: FeaturedWorkProps) {
   return (
     <section className="py-20 md:py-28 px-6 md:px-10 max-w-7xl mx-auto">
       {/* Section header */}
@@ -65,7 +37,7 @@ export default function FeaturedWork() {
 
       {/* 4-card grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {featuredSections.map((section, i) => (
+        {sections.map((section, i) => (
           <Link
             key={section.id}
             href={section.href}

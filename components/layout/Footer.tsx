@@ -1,7 +1,11 @@
 import Link from "next/link";
-import { socialLinks } from "@/data/siteContent";
+import type { SocialLink } from "@/types/portfolio";
 
-export default function Footer() {
+interface FooterProps {
+  socialLinks: SocialLink[];
+}
+
+export default function Footer({ socialLinks }: FooterProps) {
   return (
     <footer className="border-t border-ink-100 bg-cream">
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-10 md:py-14">

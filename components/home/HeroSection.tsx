@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { designer } from "@/data/siteContent";
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  heroImageUrl: string;
+  philosophy: string;
+}
+
+export default function HeroSection({ heroImageUrl, philosophy }: HeroSectionProps) {
   return (
     <section
       className="relative min-h-screen flex flex-col md:flex-row overflow-hidden"
@@ -11,7 +15,7 @@ export default function HeroSection() {
       {/* ── Left / Mobile-top: Editorial image ──────────────────────────────── */}
       <div className="relative w-full h-[55vw] min-h-[300px] md:h-auto md:w-[55%] flex-shrink-0 overflow-hidden">
         <Image
-          src={designer.heroImageUrl}
+          src={heroImageUrl}
           alt="Sidney Riojas — Fashion Designer"
           fill
           priority
@@ -47,7 +51,7 @@ export default function HeroSection() {
 
         {/* Statement */}
         <p className="anim-fade-up delay-400 font-sans font-light text-ink-500 text-base md:text-lg leading-relaxed max-w-sm">
-          {designer.philosophy}
+          {philosophy}
         </p>
 
         {/* CTAs */}

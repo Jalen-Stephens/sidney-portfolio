@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { collections } from "@/data/portfolio";
+import type { CollectionMeta } from "@/types/portfolio";
 
-export default function CollectionsView() {
+interface CollectionsViewProps {
+  collections: CollectionMeta[];
+}
+
+export default function CollectionsView({ collections }: CollectionsViewProps) {
   return (
     <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
       {collections.map((col) => (

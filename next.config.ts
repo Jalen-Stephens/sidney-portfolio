@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        pathname: "/**",
+      },
+      // ── Legacy (removed in Phase 7 once Blob cutover is verified) ──
+      {
+        protocol: "https",
         hostname: "picsum.photos",
         pathname: "/**",
       },

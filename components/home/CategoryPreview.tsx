@@ -1,49 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
-import { portfolioImages } from "@/data/portfolioImages";
+import type { CategoryCard } from "@/lib/home-content";
 
 /**
  * "Work by Category" section on the Home page.
- * Shows 4 curated top-level portfolio categories that link into the portfolio explorer.
- *
- * Uses canonical ImageKit URLs from data/portfolioImages.
+ * Shows 4 top-level portfolio categories that link into the portfolio explorer.
+ * Imagery and counts are derived from the database (see lib/home-content.ts).
  */
-const categories = [
-  {
-    id: "collections",
-    label: "Collections",
-    description: "Seasonal collection case studies",
-    imageUrl: portfolioImages.cover,
-    href: "/portfolio?category=collections",
-    count: 2,
-  },
-  {
-    id: "garments",
-    label: "Garments",
-    description: "Dresses, tops, blazers, and more",
-    imageUrl: portfolioImages.blumarine.garments[0],
-    href: "/portfolio?category=garments",
-    count: 10,
-  },
-  {
-    id: "textiles",
-    label: "Textiles",
-    description: "Fabric, embroidery & knit research",
-    imageUrl: portfolioImages.aw26.textiles[0],
-    href: "/portfolio?category=textiles",
-    count: 6,
-  },
-  {
-    id: "inspiration",
-    label: "Inspiration",
-    description: "Moodboards & creative references",
-    imageUrl: portfolioImages.aw26.inspiration[0],
-    href: "/portfolio?category=inspiration",
-    count: 3,
-  },
-];
+interface CategoryPreviewProps {
+  categories: CategoryCard[];
+}
 
-export default function CategoryPreview() {
+export default function CategoryPreview({ categories }: CategoryPreviewProps) {
   return (
     <section className="py-20 md:py-28 bg-blush-50">
       <div className="max-w-7xl mx-auto px-6 md:px-10">

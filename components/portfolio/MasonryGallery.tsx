@@ -8,11 +8,12 @@ import GalleryCard from "@/components/portfolio/GalleryCard";
 import ImageLightbox from "@/components/portfolio/ImageLightbox";
 import CollectionsView from "@/components/portfolio/CollectionsView";
 import StructuredGrid from "@/components/portfolio/StructuredGrid";
-import type { PortfolioItem, TopLevelCategory } from "@/types/portfolio";
+import type { PortfolioItem, TopLevelCategory, CollectionMeta } from "@/types/portfolio";
 import { SUBCATEGORY_MAP } from "@/data/taxonomy";
 
 interface MasonryGalleryProps {
   items: PortfolioItem[];
+  collections: CollectionMeta[];
 }
 
 /**
@@ -25,7 +26,7 @@ interface MasonryGalleryProps {
  *  - inspiration  → editorial-collage (first item spans full width, rest 2-col)
  *  - all others   → masonry (CSS columns, staggered heights)
  */
-export default function MasonryGallery({ items }: MasonryGalleryProps) {
+export default function MasonryGallery({ items, collections }: MasonryGalleryProps) {
   const searchParams = useSearchParams();
   const initialCategory = (searchParams.get("category") as FilterCategory) ?? "all";
 
@@ -66,7 +67,7 @@ export default function MasonryGallery({ items }: MasonryGalleryProps) {
   const counts = useMemo(() => {
     const result: Partial<Record<FilterCategory, number>> = {
       all: nonCollectionItems.length,
-      collections: 2, // two collections
+      collections: collections.length,
     };
     for (const cat of [
       "garments",
@@ -79,7 +80,7 @@ export default function MasonryGallery({ items }: MasonryGalleryProps) {
       result[cat] = nonCollectionItems.filter((i) => i.topLevelCategory === cat).length;
     }
     return result;
-  }, [nonCollectionItems]);
+  }, [nonCollectionItems, collections]);
 
   // Subcategory counts
   const subCounts = useMemo(() => {
@@ -100,7 +101,7 @@ export default function MasonryGallery({ items }: MasonryGalleryProps) {
   const isInspiration = selectedCategory === "inspiration";
 
   const countLabel = isCollections
-    ? "2 collections"
+    ? `${collections.length} ${collections.length === 1 ? "collection" : "collections"}`
     : `${filteredItems.length} ${filteredItems.length === 1 ? "work" : "works"}`;
 
   return (
@@ -137,7 +138,7 @@ export default function MasonryGallery({ items }: MasonryGalleryProps) {
       <div className="px-6 md:px-10 py-8 md:py-12 max-w-7xl mx-auto">
         {isCollections ? (
           /* Collection hero cards — links to dedicated case-study pages */
-          <CollectionsView />
+          <CollectionsView collections={collections} />
         ) : isTechnicalFlats ? (
           /* Structured even grid — precision and organisation for technical work */
           filteredItems.length > 0 ? (

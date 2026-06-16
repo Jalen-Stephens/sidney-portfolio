@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import MasonryGallery from "@/components/portfolio/MasonryGallery";
-import { portfolioItems } from "@/data/portfolio";
+import { getAllPortfolioItems, getAllCollections } from "@/lib/db/queries";
 
 export const metadata: Metadata = {
   title: "Portfolio — Sidney Riojas",
@@ -9,7 +9,12 @@ export const metadata: Metadata = {
     "Collections, garments, accessories, process work, textiles, inspiration, and technical flats by fashion designer Sidney Riojas.",
 };
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const [items, collections] = await Promise.all([
+    getAllPortfolioItems(),
+    getAllCollections(),
+  ]);
+
   return (
     <div style={{ paddingTop: "var(--nav-height)" }}>
       {/* Page header */}
@@ -24,7 +29,7 @@ export default function PortfolioPage() {
 
       {/* Gallery explorer — wrapped in Suspense for useSearchParams() */}
       <Suspense>
-        <MasonryGallery items={portfolioItems} />
+        <MasonryGallery items={items} collections={collections} />
       </Suspense>
     </div>
   );

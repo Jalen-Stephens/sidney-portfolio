@@ -1,4 +1,17 @@
-import { education, experience, skills, exhibitions } from "@/data/siteContent";
+import type {
+  ResumeEducation,
+  ResumeExperience,
+  SkillGroup,
+  Exhibition,
+} from "@/types/portfolio";
+
+interface ResumeSectionsProps {
+  education: ResumeEducation[];
+  experience: ResumeExperience[];
+  skills: SkillGroup[];
+  exhibitions: Exhibition[];
+  resumePdfUrl: string;
+}
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +25,13 @@ function Divider() {
   return <div className="w-full h-px bg-ink-100 my-14 md:my-16" />;
 }
 
-export default function ResumeSections() {
+export default function ResumeSections({
+  education,
+  experience,
+  skills,
+  exhibitions,
+  resumePdfUrl,
+}: ResumeSectionsProps) {
   return (
     <div className="max-w-4xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-24 md:pb-32">
       {/* ── Header ───────────────────────────────────────────────────────── */}
@@ -31,7 +50,9 @@ export default function ResumeSections() {
 
         {/* Download button */}
         <a
-          href="https://ik.imagekit.io/xajzoz300/portfolio/Riojas_Sidney_Resume_2026-2.pdf?ik-attachment=true"
+          href={resumePdfUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-3 border border-ink-900 text-ink-900 text-[10px] tracking-[0.2em] uppercase font-sans hover:bg-ink-900 hover:text-cream transition-all duration-300 self-start md:self-auto"
         >
           Download PDF

@@ -1,7 +1,12 @@
-import { designer, socialLinks } from "@/data/siteContent";
+import type { SocialLink } from "@/types/portfolio";
 
-export default function ContactForm() {
-  const mailtoHref = `mailto:${designer.email}?subject=${encodeURIComponent(
+interface ContactFormProps {
+  email: string;
+  socialLinks: SocialLink[];
+}
+
+export default function ContactForm({ email, socialLinks }: ContactFormProps) {
+  const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(
     "Portfolio inquiry"
   )}`;
 
@@ -33,10 +38,10 @@ export default function ContactForm() {
               Email
             </p>
             <a
-              href={`mailto:${designer.email}`}
+              href={`mailto:${email}`}
               className="font-display text-2xl text-ink-900 hover:text-blush-400 transition-colors duration-200"
             >
-              {designer.email}
+              {email}
             </a>
           </div>
 
