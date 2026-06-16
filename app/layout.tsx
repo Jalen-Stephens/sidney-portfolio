@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/react";
-import { getSiteContent } from "@/lib/db/site-content";
 
 /** Canonical site origin for metadata (Open Graph, etc.). Set in Vercel: NEXT_PUBLIC_SITE_URL=https://your-domain.com */
 function siteUrl(): string {
@@ -65,21 +62,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const site = await getSiteContent();
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body
         suppressHydrationWarning
         className="min-h-screen flex flex-col antialiased bg-cream text-ink-900"
       >
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer socialLinks={site.socialLinks} />
+        {children}
         <Analytics />
       </body>
     </html>
