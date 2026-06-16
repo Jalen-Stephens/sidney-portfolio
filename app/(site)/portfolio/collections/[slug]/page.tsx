@@ -39,95 +39,102 @@ export default async function CollectionPage({ params }: Props) {
   const process = items.filter((i) => i.subcategory === "process");
   const flats = items.filter((i) => i.subcategory === "technical-flats");
 
+  const sections = [
+    { title: "Looks", items: looks, layout: "masonry" as const },
+    { title: "Process", items: process, layout: "masonry" as const },
+    { title: "Technical Flats", items: flats, layout: "structured-grid" as const },
+  ].filter((s) => s.items.length > 0);
+
   return (
     <div style={{ paddingTop: "var(--nav-height)" }}>
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <div className="relative w-full h-[55vh] md:h-[70vh] overflow-hidden">
+      {/* ── Cover ─────────────────────────────────────────────────────────── */}
+      <div className="relative w-full h-[70vh] md:h-[86vh] overflow-hidden">
         <Image
           src={col.coverImageUrl}
           alt={col.coverAlt}
           fill
           sizes="100vw"
-          className="object-cover"
+          className="object-cover anim-scale-in"
           priority
         />
-        <div className="absolute inset-0 bg-linear-to-t from-ink-950/75 via-ink-950/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/15 to-ink-950/10" />
 
-        {/* Hero copy */}
-        <div className="absolute bottom-0 left-0 right-0 max-w-7xl mx-auto px-6 md:px-10 pb-10 md:pb-16">
-          <p className="text-[10px] tracking-[0.3em] uppercase font-sans text-blush-300 mb-3 anim-fade-up">
+        {/* spine marker */}
+        <span className="hidden md:flex absolute top-28 right-8 items-center gap-3 [writing-mode:vertical-rl] rotate-180 eyebrow text-cream/70">
+          {col.season}
+        </span>
+
+        {/* Masthead */}
+        <div className="absolute bottom-0 left-0 right-0 px-7 sm:px-12 lg:px-16 xl:px-24 pb-12 md:pb-20">
+          <p className="anim-fade-up eyebrow text-blush-200 mb-5 flex items-center gap-3">
+            <span className="folio">{col.year}</span>
+            <span className="inline-block w-10 h-px bg-blush-200/60" />
             {col.season}
           </p>
-          <h1 className="font-display font-light text-white text-4xl md:text-6xl leading-[1.05] anim-fade-up delay-100">
+          <h1 className="anim-fade-up delay-100 font-display font-light text-white display-xl text-balance">
             {col.title}
           </h1>
         </div>
       </div>
 
-      {/* ── Collection intro ──────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-12 md:py-16">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-          <p className="font-sans text-ink-600 leading-relaxed text-base md:text-lg max-w-2xl">
+      {/* ── Editorial intro ───────────────────────────────────────────────── */}
+      <div className="px-7 sm:px-12 lg:px-16 xl:px-24 py-16 md:py-24">
+        <div className="grid md:grid-cols-12 gap-y-10 md:gap-x-12">
+          <div className="md:col-span-2">
+            <Link
+              href="/portfolio?category=collections"
+              className="group inline-flex items-center gap-2 eyebrow text-ink-400 hover:text-ink-900 transition-colors duration-200"
+            >
+              <span className="inline-block transition-transform duration-200 group-hover:-translate-x-1">←</span>
+              Index
+            </Link>
+          </div>
+
+          <p className="md:col-span-7 font-display font-light text-ink-700 text-2xl md:text-[2.1rem] leading-[1.3] text-pretty">
             {col.description}
           </p>
 
-          {/* Meta column */}
-          <div className="shrink-0 space-y-3 md:text-right">
+          <dl className="md:col-span-3 self-end grid grid-cols-2 md:grid-cols-1 gap-6 md:gap-4">
             <div>
-              <p className="text-[9px] tracking-[0.28em] uppercase font-sans text-ink-300 mb-1">
-                Season
-              </p>
-              <p className="font-display font-light text-ink-800 text-lg">{col.season}</p>
+              <dt className="eyebrow text-ink-300 mb-1.5">Season</dt>
+              <dd className="font-display font-light text-ink-800 text-lg">{col.season}</dd>
             </div>
             <div>
-              <p className="text-[9px] tracking-[0.28em] uppercase font-sans text-ink-300 mb-1">
-                Year
-              </p>
-              <p className="font-display font-light text-ink-800 text-lg">{col.year}</p>
+              <dt className="eyebrow text-ink-300 mb-1.5">Plates</dt>
+              <dd className="font-display font-light text-ink-800 text-lg">{items.length}</dd>
             </div>
-          </div>
-        </div>
-
-        {/* Back link */}
-        <div className="mt-8 pt-8 border-t border-ink-100">
-          <Link
-            href="/portfolio?category=collections"
-            className="inline-flex items-center gap-2 text-[10px] tracking-[0.25em] uppercase font-sans text-ink-400 hover:text-ink-900 transition-colors duration-200"
-          >
-            <span className="inline-block rotate-180">→</span>
-            All Collections
-          </Link>
+          </dl>
         </div>
       </div>
 
-      {/* ── Looks ─────────────────────────────────────────────────────────── */}
-      <CollectionGallery title="Looks" items={looks} layout="masonry" />
-
-      {/* ── Process ───────────────────────────────────────────────────────── */}
-      <CollectionGallery title="Process" items={process} layout="masonry" />
-
-      {/* ── Technical Flats ───────────────────────────────────────────────── */}
-      <CollectionGallery title="Technical Flats" items={flats} layout="structured-grid" />
+      {/* ── Numbered lookbook sections ────────────────────────────────────── */}
+      {sections.map((s, i) => (
+        <CollectionGallery
+          key={s.title}
+          title={s.title}
+          items={s.items}
+          layout={s.layout}
+          index={i + 1}
+        />
+      ))}
 
       {/* ── Bottom CTA ────────────────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-16 md:py-20 border-t border-ink-100">
+      <div className="px-7 sm:px-12 lg:px-16 xl:px-24 py-20 md:py-28 border-t border-ink-100">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <p className="text-[10px] tracking-[0.3em] uppercase font-sans text-blush-400 mb-2">
-              Continue Exploring
-            </p>
-            <h3 className="font-display font-light text-2xl md:text-3xl text-ink-900">
-              See All Collections
+            <p className="eyebrow text-blush-400 mb-3">Continue</p>
+            <h3 className="font-display font-light text-3xl md:text-4xl text-ink-900">
+              Browse all collections
             </h3>
           </div>
           <Link
             href="/portfolio?category=collections"
-            className="inline-flex items-center gap-3 text-[11px] tracking-[0.22em] uppercase font-sans text-ink-500 hover:text-ink-900 transition-colors duration-200 group"
+            className="group inline-flex items-center gap-3 eyebrow tracking-[0.2em] text-ink-500 hover:text-ink-900 transition-colors duration-200"
           >
-            View Collections
-            <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
-              →
+            <span className="border-b border-ink-200 group-hover:border-ink-900 transition-colors pb-1">
+              View collections
             </span>
+            <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
           </Link>
         </div>
       </div>

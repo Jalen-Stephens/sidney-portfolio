@@ -17,33 +17,25 @@ export default function GalleryCard({ item, onClick }: GalleryCardProps) {
       aria-label={`Open ${item.title}`}
     >
       <div className="relative overflow-hidden">
-        {/* IMAGEKIT SWAP: swap item.imageUrl with ImageKit-generated URL when env var is set */}
         <Image
           src={item.imageUrl}
           alt={item.title}
           width={item.imageWidth}
           height={item.imageHeight}
           sizes="(max-width: 480px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="w-full h-auto block transition-transform duration-700 ease-in-out group-hover:scale-[1.04]"
+          className="w-full h-auto block transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
           loading="lazy"
         />
 
         {/* Hover gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-ink-950/65 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
         {/* Hover caption */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-          <p className="text-[9px] tracking-[0.22em] uppercase font-sans text-blush-300 mb-1">
-            {label}
-          </p>
-          <p className="font-display text-white text-base font-light leading-tight">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none">
+          <p className="eyebrow text-blush-200 mb-1.5">{label}</p>
+          <p className="font-display text-white text-lg font-light leading-tight text-balance">
             {item.title}
           </p>
-          {item.year && (
-            <p className="text-[9px] tracking-[0.15em] font-sans text-white/50 mt-1">
-              {item.year}
-            </p>
-          )}
         </div>
       </div>
     </button>

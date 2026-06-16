@@ -9,71 +9,71 @@ interface HeroSectionProps {
 export default function HeroSection({ heroImageUrl, philosophy }: HeroSectionProps) {
   return (
     <section
-      className="relative min-h-screen flex flex-col md:flex-row overflow-hidden"
+      className="relative min-h-screen flex flex-col lg:flex-row overflow-hidden bg-cream"
       style={{ paddingTop: "var(--nav-height)" }}
     >
-      {/* ── Left / Mobile-top: Editorial image ──────────────────────────────── */}
-      <div className="relative w-full h-[55vw] min-h-[300px] md:h-auto md:w-[55%] flex-shrink-0 overflow-hidden">
+      {/* ── Editorial image ─────────────────────────────────────────────────── */}
+      <div className="relative w-full h-[62vw] min-h-[320px] lg:h-auto lg:w-[52%] flex-shrink-0 overflow-hidden">
         <Image
           src={heroImageUrl}
           alt="Sidney Riojas — Fashion Designer"
           fill
           priority
-          sizes="(max-width: 768px) 100vw, 55vw"
+          sizes="(max-width: 1024px) 100vw, 52vw"
           className="object-cover anim-scale-in"
           style={{ transformOrigin: "center" }}
         />
-        {/* Subtle vignette on right edge — desktop only */}
-        <div className="hidden md:block absolute inset-y-0 right-0 w-20 bg-gradient-to-r from-transparent to-cream" />
+        {/* vertical "spine" marker — the printed-lookbook signature */}
+        <span className="hidden lg:flex absolute top-10 right-7 items-center gap-3 [writing-mode:vertical-rl] rotate-180 eyebrow text-cream/80">
+          Portfolio
+          <span className="inline-block w-10 h-px bg-cream/50" />
+          MMXXVI
+        </span>
+        <div className="hidden lg:block absolute inset-y-0 right-0 w-24 bg-gradient-to-r from-transparent to-cream" />
       </div>
 
-      {/* ── Right / Mobile-bottom: Text ─────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col justify-center px-8 md:px-14 lg:px-20 py-14 md:py-0 bg-cream">
-        {/* Label */}
-        <p
-          className="anim-fade-up delay-200 text-[10px] tracking-[0.35em] uppercase font-sans text-blush-400 mb-6"
-        >
+      {/* ── Masthead ────────────────────────────────────────────────────────── */}
+      <div className="flex-1 flex flex-col justify-center px-7 sm:px-12 lg:px-16 xl:px-24 py-16 lg:py-0">
+        <p className="anim-fade-up delay-200 eyebrow text-blush-400 mb-8 flex items-center gap-3">
           Fashion Designer
+          <span className="inline-block w-8 h-px bg-blush-300" />
+          New York
         </p>
 
-        {/* Name — large display type */}
-        <h1
-          className="anim-fade-up delay-300 font-display font-light leading-[0.9] text-ink-900"
-          style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)" }}
-        >
+        <h1 className="anim-fade-up delay-300 font-display font-light text-ink-900 display-hero">
           Sidney
           <br />
-          <em className="not-italic text-ink-700">Riojas</em>
+          <em className="font-light not-italic text-ink-300">Riojas</em>
         </h1>
 
-        {/* Divider */}
-        <div className="anim-fade-up delay-400 w-10 h-px bg-blush-300 my-8" />
-
-        {/* Statement */}
-        <p className="anim-fade-up delay-400 font-sans font-light text-ink-500 text-base md:text-lg leading-relaxed max-w-sm">
+        <p className="anim-fade-up delay-500 mt-10 max-w-md font-sans font-light text-ink-500 text-base md:text-lg leading-relaxed text-pretty">
           {philosophy}
         </p>
 
-        {/* CTAs */}
-        <div className="anim-fade-up delay-600 flex flex-wrap items-center gap-4 mt-10">
+        <div className="anim-fade-up delay-600 flex flex-wrap items-center gap-x-8 gap-y-4 mt-12">
           <Link
             href="/portfolio"
-            className="inline-flex items-center gap-2 px-7 py-3 bg-ink-900 text-cream text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors duration-300"
+            className="group inline-flex items-center gap-3 px-8 py-3.5 bg-ink-900 text-cream eyebrow tracking-[0.2em] hover:bg-ink-700 transition-colors duration-300"
           >
             View Portfolio
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
           <Link
             href="/about"
-            className="inline-flex items-center gap-2 px-7 py-3 border border-ink-200 text-ink-700 text-[11px] tracking-[0.2em] uppercase font-sans hover:border-ink-900 hover:text-ink-900 transition-colors duration-300"
+            className="group inline-flex items-center gap-2 eyebrow tracking-[0.2em] text-ink-500 hover:text-ink-900 transition-colors duration-300"
           >
-            About
+            <span className="border-b border-ink-200 group-hover:border-ink-900 transition-colors pb-1">
+              About the studio
+            </span>
           </Link>
         </div>
 
-        {/* Location mark */}
-        <p className="anim-fade-up delay-800 mt-14 text-[10px] tracking-[0.25em] uppercase font-sans text-ink-200">
-          New York, NY
-        </p>
+        {/* folio footer */}
+        <div className="anim-fade-up delay-800 mt-16 lg:mt-20 flex items-center gap-4 text-ink-300">
+          <span className="folio">N° 01</span>
+          <span className="flex-1 max-w-[160px] h-px bg-ink-100" />
+          <span className="eyebrow text-ink-300">Spring / Summer · Autumn / Winter</span>
+        </div>
       </div>
     </section>
   );

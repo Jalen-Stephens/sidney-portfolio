@@ -18,13 +18,17 @@ export default async function PortfolioPage() {
   return (
     <div style={{ paddingTop: "var(--nav-height)" }}>
       {/* Page header */}
-      <div className="px-6 md:px-10 pt-14 pb-10 max-w-7xl mx-auto">
-        <p className="text-[10px] tracking-[0.3em] uppercase font-sans text-blush-400 mb-3">
-          Work
+      <div className="px-6 md:px-10 pt-16 md:pt-20 pb-8 md:pb-10 max-w-7xl mx-auto">
+        <p className="eyebrow text-blush-400 mb-4 flex items-center gap-3">
+          The Work
+          <span className="inline-block w-8 h-px bg-blush-200" />
+          <span className="folio text-ink-300">MMXXVI</span>
         </p>
-        <h1 className="font-display font-light text-4xl md:text-5xl text-ink-900">
-          Portfolio
-        </h1>
+        <h1 className="font-display font-light text-ink-900 display-xl">Portfolio</h1>
+        <p className="mt-5 max-w-lg font-sans font-light text-ink-500 leading-relaxed text-pretty">
+          Collections, garments, textiles, process, and technical work — the full archive,
+          filterable by category.
+        </p>
       </div>
 
       {/* Gallery explorer — wrapped in Suspense for useSearchParams() */}

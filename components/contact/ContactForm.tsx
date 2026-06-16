@@ -6,54 +6,47 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ email, socialLinks }: ContactFormProps) {
-  const mailtoHref = `mailto:${email}?subject=${encodeURIComponent(
-    "Portfolio inquiry"
-  )}`;
+  const mailtoHref = `mailto:${email}?subject=${encodeURIComponent("Portfolio inquiry")}`;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-10 pt-16 md:pt-24 pb-24 md:pb-32">
-      {/* Page header */}
-      <div className="mb-14 md:mb-20">
-        <p className="text-[10px] tracking-[0.3em] uppercase font-sans text-blush-400 mb-4">
+    <div className="px-7 sm:px-12 lg:px-16 xl:px-24 pt-16 md:pt-24 pb-24 md:pb-32">
+      {/* Masthead */}
+      <div className="mb-16 md:mb-24">
+        <p className="eyebrow text-blush-400 mb-5 flex items-center gap-3">
+          <span className="folio text-ink-300">✦</span>
           Get in touch
         </p>
-        <h1 className="font-display font-light text-4xl md:text-5xl lg:text-6xl text-ink-900 leading-tight max-w-2xl">
+        <h1 className="font-display font-light text-ink-900 display-hero leading-[0.95] text-balance">
           Let&rsquo;s work
           <br />
           <em className="text-blush-400">together.</em>
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
-        {/* ── Left: Contact info ──────────────────────────────────────────── */}
-        <div>
-          <p className="font-sans font-light text-ink-500 text-base leading-relaxed mb-10 max-w-sm">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-12">
+        {/* ── Left: details ───────────────────────────────────────────────── */}
+        <div className="md:col-span-7">
+          <p className="font-sans font-light text-ink-500 text-lg leading-relaxed mb-12 max-w-md text-pretty">
             Available for creative direction, collection consulting, editorial
             collaboration, and select freelance design projects.
           </p>
 
-          {/* Direct email */}
-          <div className="mb-10">
-            <p className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-300 mb-2">
-              Email
-            </p>
+          <div className="mb-12">
+            <p className="eyebrow text-ink-300 mb-3">Email</p>
             <a
               href={`mailto:${email}`}
-              className="font-display text-2xl text-ink-900 hover:text-blush-400 transition-colors duration-200"
+              className="font-display font-light text-3xl md:text-4xl text-ink-900 hover:text-blush-400 transition-colors duration-200"
             >
               {email}
             </a>
           </div>
 
-          {/* Social */}
-          <div className="space-y-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
             {socialLinks
               .filter((l) => l.platform !== "Email")
               .map((link) => (
                 <div key={link.platform}>
-                  <p className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-300 mb-1">
-                    {link.platform}
-                  </p>
+                  <p className="eyebrow text-ink-300 mb-2">{link.platform}</p>
                   <a
                     href={link.url}
                     target="_blank"
@@ -64,35 +57,28 @@ export default function ContactForm({ email, socialLinks }: ContactFormProps) {
                   </a>
                 </div>
               ))}
-          </div>
-
-          {/* Location */}
-          <div className="mt-12 pt-10 border-t border-ink-100">
-            <p className="text-[10px] tracking-[0.25em] uppercase font-sans text-ink-300 mb-2">
-              Based in
-            </p>
-            <p className="font-display text-xl text-ink-700 font-light">
-              New York, NY
-            </p>
+            <div>
+              <p className="eyebrow text-ink-300 mb-2">Based in</p>
+              <p className="font-sans text-ink-700 text-sm">New York, NY</p>
+            </div>
           </div>
         </div>
 
-        {/* ── Right: Mailto CTA ───────────────────────────────────────────── */}
-        <div className="flex flex-col items-start justify-center border-t border-ink-100 pt-10 md:border-t-0 md:border-l md:pl-16 md:pt-0">
+        {/* ── Right: CTA ──────────────────────────────────────────────────── */}
+        <div className="md:col-span-5 md:col-start-9 flex flex-col items-start justify-center border-t border-ink-100 pt-12 md:border-t-0 md:border-l md:pl-12 md:pt-0">
           <div className="w-8 h-px bg-blush-300 mb-8" />
-          <p className="font-display font-light text-3xl text-ink-900 mb-4">
+          <p className="font-display font-light text-3xl md:text-4xl text-ink-900 mb-4 leading-tight">
             Start a conversation.
           </p>
-          <p className="font-sans text-ink-500 text-sm leading-relaxed max-w-sm mb-10">
-            Send a note with your project details, timeline, and any relevant
-            references.
+          <p className="font-sans text-ink-500 text-sm leading-relaxed max-w-sm mb-10 text-pretty">
+            Send a note with your project details, timeline, and any relevant references.
           </p>
           <a
             href={mailtoHref}
-            className="inline-flex items-center gap-3 px-8 py-3.5 bg-ink-900 text-cream text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors duration-300"
+            className="group inline-flex items-center gap-3 px-8 py-3.5 bg-ink-900 text-cream eyebrow tracking-[0.2em] hover:bg-ink-700 transition-colors duration-300"
           >
             Email Sidney
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true" className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </a>
         </div>
       </div>

@@ -2,63 +2,66 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CategoryCard } from "@/lib/home-content";
 
-/**
- * "Work by Category" section on the Home page.
- * Shows 4 top-level portfolio categories that link into the portfolio explorer.
- * Imagery and counts are derived from the database (see lib/home-content.ts).
- */
 interface CategoryPreviewProps {
   categories: CategoryCard[];
 }
 
 export default function CategoryPreview({ categories }: CategoryPreviewProps) {
   return (
-    <section className="py-20 md:py-28 bg-blush-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-        {/* Header */}
-        <div className="mb-12 md:mb-16">
-          <p className="text-[10px] tracking-[0.3em] uppercase font-sans text-blush-400 mb-3">
-            Explore
-          </p>
-          <h2 className="font-display font-light text-3xl md:text-4xl text-ink-900">
-            Work by Category
-          </h2>
-        </div>
+    <section className="bg-blush-50 px-7 sm:px-12 lg:px-16 xl:px-24 py-24 md:py-32">
+      {/* Masthead */}
+      <div className="mb-12 md:mb-16">
+        <p className="eyebrow text-blush-400 mb-4 flex items-center gap-3">
+          <span className="folio text-ink-300">II</span>
+          <span className="inline-block w-8 h-px bg-blush-300" />
+          The Index
+        </p>
+        <h2 className="font-display font-light text-ink-900 display-lg text-balance">
+          Explore by category
+        </h2>
+      </div>
 
-        {/* 4-column category grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-          {categories.map((cat) => (
+      {/* Editorial contents list */}
+      <ul className="border-t border-ink-200/60">
+        {categories.map((cat, i) => (
+          <li key={cat.id} className="reveal" style={{ animationDelay: `${i * 50}ms` }}>
             <Link
-              key={cat.id}
               href={cat.href}
-              className="group relative block overflow-hidden"
+              className="group grid grid-cols-[auto_1fr_auto] md:grid-cols-[3rem_1fr_10rem_auto] items-center gap-4 md:gap-8 py-6 md:py-8 border-b border-ink-200/60"
             >
-              {/* Image */}
-              <div className="relative aspect-3/4 overflow-hidden bg-blush-100">
-                <Image
-                  src={cat.imageUrl}
-                  alt={cat.label}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-[1.05]"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-ink-950/70 via-ink-950/10 to-transparent" />
+              <span className="folio text-ink-300 group-hover:text-blush-400 transition-colors">
+                {String(i + 1).padStart(2, "0")}
+              </span>
 
-                {/* Text */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                  <p className="font-display text-white text-xl md:text-2xl font-light leading-tight">
+              <div className="flex items-center gap-5 min-w-0">
+                <div className="relative w-14 h-16 md:w-16 md:h-20 flex-shrink-0 overflow-hidden bg-blush-100">
+                  <Image
+                    src={cat.imageUrl}
+                    alt={cat.label}
+                    fill
+                    sizes="64px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-display font-light text-ink-900 text-2xl md:text-4xl leading-none group-hover:text-blush-400 transition-colors duration-300 truncate">
                     {cat.label}
-                  </p>
-                  <p className="text-[9px] tracking-[0.2em] uppercase font-sans text-blush-200 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {cat.count} {cat.count === 1 ? "work" : "works"}
-                  </p>
+                  </h3>
+                  <p className="hidden md:block mt-2 font-sans text-sm text-ink-400">{cat.description}</p>
                 </div>
               </div>
+
+              <span className="hidden md:block eyebrow text-ink-400 text-right">
+                {cat.count} {cat.count === 1 ? "work" : "works"}
+              </span>
+
+              <span className="eyebrow text-ink-300 group-hover:text-ink-900 transition-all duration-300 group-hover:translate-x-1">
+                →
+              </span>
             </Link>
-          ))}
-        </div>
-      </div>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

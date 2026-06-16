@@ -45,34 +45,37 @@ export default function Navbar() {
         style={{ height: "var(--nav-height)" }}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 h-full flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo / masthead */}
           <Link
             href="/"
-            className={clsx(
-              "font-display text-xl tracking-[0.15em] uppercase transition-colors duration-300",
-              transparent ? "text-ink-900" : "text-ink-900",
-              "hover:text-blush-400"
-            )}
+            className="group font-display text-xl tracking-[0.18em] uppercase text-ink-900 leading-none"
           >
-            Sidney Riojas
+            Sidney <span className="text-ink-400 group-hover:text-blush-400 transition-colors duration-300">Riojas</span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-10">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={clsx(
-                  "text-[11px] tracking-[0.2em] uppercase font-sans transition-colors duration-200",
-                  pathname === href
-                    ? "text-ink-900"
-                    : "text-ink-500 hover:text-ink-900"
-                )}
-              >
-                {label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-9">
+            {navLinks.map(({ href, label }) => {
+              const active = pathname === href || pathname.startsWith(href + "/");
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={clsx(
+                    "relative eyebrow tracking-[0.22em] py-1 transition-colors duration-200",
+                    active ? "text-ink-900" : "text-ink-500 hover:text-ink-900"
+                  )}
+                >
+                  {label}
+                  <span
+                    className={clsx(
+                      "absolute -bottom-0.5 left-0 h-px bg-blush-400 transition-all duration-300",
+                      active ? "w-full" : "w-0"
+                    )}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Mobile hamburger */}

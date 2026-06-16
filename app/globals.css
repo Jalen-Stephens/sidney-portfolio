@@ -108,8 +108,65 @@ h1, h2, h3, h4 {
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
 .delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
 .delay-800 { animation-delay: 800ms; }
+
+/* ── Editorial system ────────────────────────────────────── */
+/* Eyebrow / kicker label — the recurring DM Sans micro-label. */
+.eyebrow {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* Folio marker — printed-lookbook page/section number. */
+.folio {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fluid editorial display scale (Cormorant). */
+.display-hero { font-size: clamp(3.75rem, 11vw, 9.5rem); line-height: 0.92; }
+.display-xl   { font-size: clamp(2.75rem, 6vw, 5.5rem);  line-height: 0.98; }
+.display-lg   { font-size: clamp(2rem, 4vw, 3.5rem);     line-height: 1.04; }
+
+.text-balance { text-wrap: balance; }
+.text-pretty  { text-wrap: pretty; }
+
+/* ── Scroll-driven reveal (progressive enhancement) ──────── */
+/* Default: fully visible, so unsupported browsers show content. */
+.reveal { opacity: 1; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+/* ── Accessibility: respect reduced motion ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim-fade-up,
+  .anim-fade-in,
+  .anim-scale-in,
+  .reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
 
 /* ── Scrollbar hide utility ──────────────────────────────── */
 @utility scrollbar-none {
