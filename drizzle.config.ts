@@ -9,7 +9,12 @@ export default defineConfig({
   out: "./lib/db/migrations",
   dialect: "postgresql",
   dbCredentials: {
-    // Only required for push/migrate/studio; `generate` works without it.
-    url: process.env.DATABASE_URL ?? "",
+    // Prefer Neon's direct (non-pooled) endpoint for DDL/migrations; fall back
+    // to the pooled URL. Only required for push/migrate/studio.
+    url:
+      process.env.DATABASE_URL_UNPOOLED ??
+      process.env.POSTGRES_URL_NON_POOLING ??
+      process.env.DATABASE_URL ??
+      "",
   },
 });
