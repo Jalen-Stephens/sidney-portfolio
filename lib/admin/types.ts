@@ -40,6 +40,18 @@ export interface UpdateItemInput {
   featured?: boolean;
 }
 
+export interface NewCollectionInput {
+  title: string;
+  season: string;
+  year: number;
+  description: string;
+  coverImageUrl: string;
+  coverImageWidth: number;
+  coverImageHeight: number;
+  coverBlobPathname: string;
+  coverAlt: string;
+}
+
 export interface CollectionInput {
   slug: string;
   title?: string;

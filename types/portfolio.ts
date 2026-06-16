@@ -9,7 +9,8 @@ export type TopLevelCategory =
   | "inspiration"
   | "technical-flats";
 
-export type CollectionSlug = "blumarine-ss26" | "aw26-collection";
+/** Collections are user-managed, so slugs are open-ended strings. */
+export type CollectionSlug = string;
 
 export type GarmentSubcategory = "dresses" | "tops" | "cardigans" | "blazers" | "minis";
 export type ProcessSubcategory = "sketches" | "development";

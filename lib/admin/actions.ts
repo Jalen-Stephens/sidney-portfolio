@@ -14,6 +14,7 @@ import type {
   NewItemInput,
   UpdateItemInput,
   CollectionInput,
+  NewCollectionInput,
   SiteContentInput,
 } from "./types";
 
@@ -168,6 +169,73 @@ export async function updateCollection(input: CollectionInput): Promise<ActionSt
     patch.coverBlobPathname = input.coverBlobPathname ?? null;
   }
   await db.update(collections).set(patch).where(eq(collections.slug, input.slug));
+  revalidatePublic();
+  return { ok: true };
+}
+
+async function uniqueCollectionSlug(title: string): Promise<string> {
+  const base = slugify(title) || "collection";
+  const existing = await db
+    .select({ slug: collections.slug })
+    .from(collections)
+    .where(eq(collections.slug, base));
+  return existing.length === 0 ? base : `${base}-${randomUUID().slice(0, 4)}`;
+}
+
+export async function createCollection(
+  input: NewCollectionInput,
+): Promise<ActionState & { slug?: string }> {
+  await verifySession();
+  if (!input.title.trim() || !input.coverImageUrl) {
+    return { error: "Title and a cover image are required." };
+  }
+  const slug = await uniqueCollectionSlug(input.title);
+  const rows = await db
+    .select({ m: sql<number>`coalesce(max(${collections.sortIndex}), -1)` })
+    .from(collections);
+  await db.insert(collections).values({
+    slug,
+    title: input.title.trim(),
+    season: input.season.trim() || "Season",
+    year: input.year || new Date().getFullYear(),
+    description: input.description?.trim() ?? "",
+    coverImageUrl: input.coverImageUrl,
+    coverImageWidth: input.coverImageWidth || 1200,
+    coverImageHeight: input.coverImageHeight || 800,
+    coverAlt: input.coverAlt?.trim() || input.title.trim(),
+    coverBlobPathname: input.coverBlobPathname || null,
+    sortIndex: Number(rows[0]?.m ?? -1) + 1,
+  });
+  revalidatePublic();
+  return { ok: true, slug };
+}
+
+export async function deleteCollection(slug: string): Promise<ActionState> {
+  await verifySession();
+  const [row] = await db
+    .select()
+    .from(collections)
+    .where(eq(collections.slug, slug))
+    .limit(1);
+  if (!row) return { error: "Collection not found." };
+
+  // Items in this collection keep their images; the FK sets collection_slug null.
+  // Only delete the cover blob if no portfolio item references the same image.
+  if (row.coverImageUrl) {
+    const refs = await db
+      .select({ n: sql<number>`count(*)` })
+      .from(portfolioItems)
+      .where(eq(portfolioItems.imageUrl, row.coverImageUrl));
+    if (Number(refs[0]?.n ?? 0) === 0) {
+      try {
+        await del(row.coverImageUrl);
+      } catch {
+        // ignore — removing the row is what matters
+      }
+    }
+  }
+
+  await db.delete(collections).where(eq(collections.slug, slug));
   revalidatePublic();
   return { ok: true };
 }

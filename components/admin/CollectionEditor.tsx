@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { upload } from "@vercel/blob/client";
-import { updateCollection } from "@/lib/admin/actions";
+import { updateCollection, deleteCollection } from "@/lib/admin/actions";
 import type { CollectionMeta } from "@/types/portfolio";
 
 export default function CollectionEditor({ collection }: { collection: CollectionMeta }) {
@@ -30,6 +30,17 @@ export default function CollectionEditor({ collection }: { collection: Collectio
       });
       setMsg(res.ok ? "Saved" : res.error ?? "Error");
       if (res.ok) router.refresh();
+    });
+  }
+
+  function remove() {
+    if (!window.confirm(
+      `Delete the "${collection.title}" collection? Its images are kept and become uncategorised; only the collection page is removed.`,
+    )) return;
+    startTransition(async () => {
+      const res = await deleteCollection(collection.slug);
+      if (res.ok) router.refresh();
+      else setMsg(res.error ?? "Error");
     });
   }
 
@@ -101,6 +112,10 @@ export default function CollectionEditor({ collection }: { collection: Collectio
         <button onClick={save} disabled={pending}
           className="px-4 py-2 bg-ink-900 text-cream text-[10px] tracking-[0.18em] uppercase font-sans hover:bg-ink-700 transition-colors disabled:opacity-30">
           Save
+        </button>
+        <button onClick={remove} disabled={pending}
+          className="px-4 py-2 border border-ink-200 text-ink-500 text-[10px] tracking-[0.18em] uppercase font-sans hover:border-blush-400 hover:text-blush-600 transition-colors disabled:opacity-30">
+          Delete
         </button>
         {msg && <span className="text-[11px] font-sans text-ink-400">{msg}</span>}
       </div>

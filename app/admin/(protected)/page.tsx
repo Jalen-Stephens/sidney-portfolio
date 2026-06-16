@@ -36,6 +36,25 @@ export default async function AdminDashboardPage() {
           </Link>
         ))}
       </div>
+
+      {/* Quick guide */}
+      <div className="mt-12 border-t border-ink-100 pt-8">
+        <p className="eyebrow text-blush-400 mb-5">Where things live</p>
+        <ul className="space-y-3 text-sm font-sans text-ink-600">
+          <li>
+            <Link href="/admin/items" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Work</Link>
+            {" — "}upload, edit descriptions, <strong className="font-normal">delete</strong> images, and drag to reorder.
+          </li>
+          <li>
+            <Link href="/admin/collections" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Collections</Link>
+            {" — "}create a new collection, edit details/cover, or <strong className="font-normal">delete</strong> one.
+          </li>
+          <li>
+            <Link href="/admin/content" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Site</Link>
+            {" — "}edit bio, philosophy, résumé, and social links.
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
