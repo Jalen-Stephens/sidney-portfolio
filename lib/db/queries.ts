@@ -3,6 +3,7 @@ import { cache } from "react";
 import { eq, asc } from "drizzle-orm";
 import { db } from "./client";
 import { collections, portfolioItems } from "./schema";
+import { normalizeSubcategory } from "@/data/taxonomy";
 import type { CollectionRow, PortfolioItemRow } from "./schema";
 import type {
   PortfolioItem,
@@ -19,7 +20,8 @@ function rowToItem(r: PortfolioItemRow): PortfolioItem {
     title: r.title,
     slug: r.slug,
     topLevelCategory: r.topLevelCategory as TopLevelCategory,
-    subcategory: r.subcategory ?? undefined,
+    // Normalised so hand-typed labels ("Process", "Handbags") still match filters.
+    subcategory: normalizeSubcategory(r.subcategory),
     collection: (r.collectionSlug ?? undefined) as CollectionSlug | undefined,
     imageUrl: r.imageUrl,
     imageWidth: r.imageWidth,

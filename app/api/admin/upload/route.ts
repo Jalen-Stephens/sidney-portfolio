@@ -17,7 +17,10 @@ export async function POST(request: Request): Promise<NextResponse> {
           throw new Error("Unauthorized");
         }
         return {
-          allowedContentTypes: ["image/jpeg", "image/png", "image/webp", "image/avif"],
+          allowedContentTypes: [
+            "image/jpeg", "image/png", "image/webp", "image/avif", "image/gif",
+            "application/pdf", // résumé
+          ],
           addRandomSuffix: true,
           maximumSizeInBytes: 30 * 1024 * 1024,
         };

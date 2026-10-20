@@ -13,7 +13,7 @@ export default async function AdminContentPage() {
       </p>
       <h1 className="font-display font-light text-4xl text-ink-900 mb-2">Site content</h1>
       <p className="text-sm font-sans text-ink-400 mb-4">
-        Bio, philosophy, résumé, and links shown across the public site.
+        Photos, bio, philosophy, résumé, and links shown across the public site. Use ↑ ↓ to reorder lists, then Save.
       </p>
 
       <SiteContentForm
@@ -27,6 +27,10 @@ export default async function AdminContentPage() {
           bio: s.bio,
           bioExtended: s.bioExtended,
           philosophy: s.philosophy,
+          heroImageUrl: s.heroImageUrl,
+          portraitUrl: s.portraitUrl,
+          aboutImages: s.aboutImages,
+          resumePdfUrl: s.resumePdfUrl,
           inspirations: s.inspirations,
           socialLinks: s.socialLinks,
           experience: s.experience,

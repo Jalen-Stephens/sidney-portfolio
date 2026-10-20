@@ -1,5 +1,6 @@
 import "server-only";
 import { getAllCollections, getGalleryItems } from "./db/queries";
+import { GALLERY_CATEGORIES } from "@/data/taxonomy";
 import type { TopLevelCategory } from "@/types/portfolio";
 
 export interface FeaturedSection {
@@ -21,11 +22,9 @@ export interface CategoryCard {
 
 const FALLBACK_IMG = "/window.svg";
 
-/** Four featured cards: the two collections + Process + Technical Flats reps. */
+/** Four featured cards: the first two collections, then gallery categories that have work. */
 export async function getFeaturedSections(): Promise<FeaturedSection[]> {
   const [cols, gallery] = await Promise.all([getAllCollections(), getGalleryItems()]);
-  const firstImage = (cat: TopLevelCategory) =>
-    gallery.find((i) => i.topLevelCategory === cat)?.imageUrl ?? FALLBACK_IMG;
 
   const collectionCards: FeaturedSection[] = cols.slice(0, 2).map((c) => ({
     id: c.slug,
@@ -35,26 +34,23 @@ export async function getFeaturedSections(): Promise<FeaturedSection[]> {
     imageUrl: c.coverImageUrl,
   }));
 
-  return [
-    ...collectionCards,
-    {
-      id: "process",
-      title: "Process",
-      subtitle: "Sketches & Development",
-      href: "/portfolio?category=process",
-      imageUrl: firstImage("process"),
-    },
-    {
-      id: "technical-flats",
-      title: "Technical Flats",
-      subtitle: "Technical Drawings",
-      href: "/portfolio?category=technical-flats",
-      imageUrl: firstImage("technical-flats"),
-    },
-  ];
+  const categoryCards: FeaturedSection[] = GALLERY_CATEGORIES.flatMap((cat) => {
+    const first = gallery.find((i) => i.topLevelCategory === cat.id);
+    return first
+      ? [{
+          id: cat.id,
+          title: cat.label,
+          subtitle: cat.description,
+          href: `/portfolio?category=${cat.id}`,
+          imageUrl: first.imageUrl,
+        }]
+      : [];
+  });
+
+  return [...collectionCards, ...categoryCards].slice(0, 4);
 }
 
-/** Four "Work by Category" cards with live representative imagery + counts. */
+/** "Work by Category" cards with live representative imagery + counts. */
 export async function getCategoryCards(): Promise<CategoryCard[]> {
   const [cols, gallery] = await Promise.all([getAllCollections(), getGalleryItems()]);
   const countOf = (cat: TopLevelCategory) =>
@@ -71,29 +67,13 @@ export async function getCategoryCards(): Promise<CategoryCard[]> {
       imageUrl: cols[0]?.coverImageUrl ?? FALLBACK_IMG,
       count: cols.length,
     },
-    {
-      id: "garments",
-      label: "Garments",
-      description: "Dresses, tops, blazers, and more",
-      href: "/portfolio?category=garments",
-      imageUrl: firstImage("garments"),
-      count: countOf("garments"),
-    },
-    {
-      id: "textiles",
-      label: "Textiles",
-      description: "Fabric, embroidery & knit research",
-      href: "/portfolio?category=textiles",
-      imageUrl: firstImage("textiles"),
-      count: countOf("textiles"),
-    },
-    {
-      id: "inspiration",
-      label: "Inspiration",
-      description: "Moodboards & creative references",
-      href: "/portfolio?category=inspiration",
-      imageUrl: firstImage("inspiration"),
-      count: countOf("inspiration"),
-    },
+    ...GALLERY_CATEGORIES.map((cat) => ({
+      id: cat.id,
+      label: cat.label,
+      description: cat.description,
+      href: `/portfolio?category=${cat.id}`,
+      imageUrl: firstImage(cat.id),
+      count: countOf(cat.id),
+    })),
   ];
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPortfolioItems, getAllCollections } from "@/lib/db/queries";
+import { GALLERY_CATEGORIES, getCategoryLabel } from "@/data/taxonomy";
 
 export const metadata = { title: "Studio — Sidney Riojas", robots: { index: false } };
 
@@ -9,11 +10,37 @@ export default async function AdminDashboardPage() {
     getAllCollections(),
   ]);
 
+  const galleryIds = new Set<string>(GALLERY_CATEGORIES.map((c) => c.id));
+  const galleryItems = items.filter((i) => !i.collection);
   const stats = [
     { label: "Portfolio items", value: items.length, href: "/admin/items" },
     { label: "Collections", value: collections.length, href: "/admin/collections" },
-    { label: "Featured", value: items.filter((i) => i.featured).length, href: "/admin/items" },
+    { label: "In the gallery", value: galleryItems.length, href: "/admin/items" },
   ];
+
+  // Things that make work hard to find on the public site.
+  const issues: { text: string; href: string }[] = [];
+  const noTab = galleryItems.filter((i) => !galleryIds.has(i.topLevelCategory));
+  if (noTab.length) {
+    issues.push({
+      text: `${noTab.length} image${noTab.length === 1 ? " is" : "s are"} filed under a category with no tab (${[
+        ...new Set(noTab.map((i) => getCategoryLabel(i.topLevelCategory))),
+      ].join(", ")}), so ${noTab.length === 1 ? "it only shows" : "they only show"} under All Work.`,
+      href: "/admin/items",
+    });
+  }
+  for (const c of collections) {
+    if (!items.some((i) => i.collection === c.slug)) {
+      issues.push({ text: `“${c.title}” has no images yet, so its page is empty.`, href: "/admin/items" });
+    }
+  }
+  const untitled = items.filter((i) => /^\d+$/.test(i.title.trim()));
+  if (untitled.length) {
+    issues.push({
+      text: `${untitled.length} image${untitled.length === 1 ? " has" : "s have"} a number for a title (from the file name).`,
+      href: "/admin/items",
+    });
+  }
 
   return (
     <div>
@@ -37,21 +64,44 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
+      {/* Health check */}
+      <div className="mt-12 border-t border-ink-100 pt-8">
+        <p className="eyebrow text-blush-400 mb-5">Site check</p>
+        {issues.length === 0 ? (
+          <p className="text-sm font-sans text-green-700">✓ Everything is placed where visitors can find it.</p>
+        ) : (
+          <ul className="space-y-2">
+            {issues.map((issue, i) => (
+              <li key={i} className="text-sm font-sans text-ink-600">
+                <span className="text-blush-600 mr-2">⚠</span>
+                {issue.text}{" "}
+                <Link href={issue.href} className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">
+                  Fix
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       {/* Quick guide */}
       <div className="mt-12 border-t border-ink-100 pt-8">
         <p className="eyebrow text-blush-400 mb-5">Where things live</p>
         <ul className="space-y-3 text-sm font-sans text-ink-600">
           <li>
             <Link href="/admin/items" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Work</Link>
-            {" — "}upload, edit descriptions, <strong className="font-normal">delete</strong> images, and drag to reorder.
+            {" — "}upload images, choose where each one shows (“Shows in”), edit titles and descriptions, replace or delete images, and drag ⠿ to reorder.
           </li>
           <li>
             <Link href="/admin/collections" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Collections</Link>
-            {" — "}create a new collection, edit details/cover, or <strong className="font-normal">delete</strong> one.
+            {" — "}create a collection, edit its details and cover, drag to reorder, or delete one.
           </li>
           <li>
             <Link href="/admin/content" className="text-ink-900 underline underline-offset-4 decoration-ink-200 hover:decoration-ink-900">Site</Link>
-            {" — "}edit bio, philosophy, résumé, and social links.
+            {" — "}home image, portrait, About gallery, résumé PDF, bio, résumé entries, and social links.
+          </li>
+          <li className="text-ink-400">
+            Saved changes go live right away. If a page still looks old, refresh it — on iPhone/iPad, pull down to reload.
           </li>
         </ul>
       </div>

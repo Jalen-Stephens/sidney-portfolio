@@ -9,7 +9,7 @@ import ImageLightbox from "@/components/portfolio/ImageLightbox";
 import CollectionsView from "@/components/portfolio/CollectionsView";
 import StructuredGrid from "@/components/portfolio/StructuredGrid";
 import type { PortfolioItem, TopLevelCategory, CollectionMeta } from "@/types/portfolio";
-import { SUBCATEGORY_MAP } from "@/data/taxonomy";
+import { SUBCATEGORY_MAP, GALLERY_CATEGORIES } from "@/data/taxonomy";
 
 interface MasonryGalleryProps {
   items: PortfolioItem[];
@@ -69,15 +69,8 @@ export default function MasonryGallery({ items, collections }: MasonryGalleryPro
       all: nonCollectionItems.length,
       collections: collections.length,
     };
-    for (const cat of [
-      "garments",
-      "accessories",
-      "process",
-      "textiles",
-      "inspiration",
-      "technical-flats",
-    ] as TopLevelCategory[]) {
-      result[cat] = nonCollectionItems.filter((i) => i.topLevelCategory === cat).length;
+    for (const { id } of GALLERY_CATEGORIES) {
+      result[id] = nonCollectionItems.filter((i) => i.topLevelCategory === id).length;
     }
     return result;
   }, [nonCollectionItems, collections]);

@@ -38,6 +38,11 @@ export interface UpdateItemInput {
   subcategory?: string | null;
   collectionSlug?: string | null;
   featured?: boolean;
+  /** Set together to replace the item's image. */
+  imageUrl?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  blobPathname?: string | null;
 }
 
 export interface NewCollectionInput {
@@ -75,6 +80,11 @@ export interface SiteContentInput {
   bio?: string;
   bioExtended?: string;
   philosophy?: string;
+  heroImageUrl?: string;
+  portraitUrl?: string;
+  aboutImageUrl?: string;
+  aboutImages?: string[];
+  resumePdfUrl?: string;
   education?: ResumeEducation[];
   experience?: ResumeExperience[];
   skills?: SkillGroup[];

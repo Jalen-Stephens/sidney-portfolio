@@ -6,7 +6,7 @@ import { getAllPortfolioItems, getAllCollections } from "@/lib/db/queries";
 export const metadata: Metadata = {
   title: "Portfolio — Sidney Riojas",
   description:
-    "Collections, garments, accessories, process work, textiles, inspiration, and technical flats by fashion designer Sidney Riojas.",
+    "Collections, garments, accessories, and process work by fashion designer Sidney Riojas.",
 };
 
 export default async function PortfolioPage() {
@@ -26,7 +26,7 @@ export default async function PortfolioPage() {
         </p>
         <h1 className="font-display font-light text-ink-900 display-xl">Portfolio</h1>
         <p className="mt-5 max-w-lg font-sans font-light text-ink-500 leading-relaxed text-pretty">
-          Collections, garments, textiles, process, and technical work — the full archive,
+          Collections, garments, accessories, and process work — the full archive,
           filterable by category.
         </p>
       </div>

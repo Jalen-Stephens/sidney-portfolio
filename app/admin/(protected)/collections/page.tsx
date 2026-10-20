@@ -1,11 +1,13 @@
-import { getAllCollections } from "@/lib/db/queries";
-import CollectionEditor from "@/components/admin/CollectionEditor";
+import { getAllCollections, getAllPortfolioItems } from "@/lib/db/queries";
+import CollectionList from "@/components/admin/CollectionList";
 import CollectionCreator from "@/components/admin/CollectionCreator";
 
 export const metadata = { title: "Collections — Studio", robots: { index: false } };
 
 export default async function AdminCollectionsPage() {
-  const collections = await getAllCollections();
+  const [collections, items] = await Promise.all([getAllCollections(), getAllPortfolioItems()]);
+  const itemCounts: Record<string, number> = {};
+  for (const i of items) if (i.collection) itemCounts[i.collection] = (itemCounts[i.collection] ?? 0) + 1;
 
   return (
     <div>
@@ -14,16 +16,12 @@ export default async function AdminCollectionsPage() {
       </p>
       <h1 className="font-display font-light text-4xl text-ink-900 mb-2">Collections</h1>
       <p className="text-sm font-sans text-ink-400 mb-8">
-        Create, edit, or remove seasonal collections. Deleting one keeps its images.
+        Create, edit, reorder, or remove collections. Add images to a collection from the Work page. Deleting a collection keeps its images.
       </p>
 
       <CollectionCreator />
 
-      <div className="space-y-4">
-        {collections.map((c) => (
-          <CollectionEditor key={c.slug} collection={c} />
-        ))}
-      </div>
+      <CollectionList collections={collections} itemCounts={itemCounts} />
     </div>
   );
 }

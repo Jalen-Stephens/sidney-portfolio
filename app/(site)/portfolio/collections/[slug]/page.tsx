@@ -8,6 +8,7 @@ import {
   getAllCollections,
 } from "@/lib/db/queries";
 import CollectionGallery from "@/components/portfolio/CollectionGallery";
+import { COLLECTION_SECTIONS, resolveCollectionSection } from "@/data/taxonomy";
 
 // Next.js 15+: params is now a Promise and must be awaited
 interface Props {
@@ -35,15 +36,11 @@ export default async function CollectionPage({ params }: Props) {
   if (!col) notFound();
 
   const items = await getItemsByCollection(slug);
-  const looks = items.filter((i) => i.subcategory === "looks");
-  const process = items.filter((i) => i.subcategory === "process");
-  const flats = items.filter((i) => i.subcategory === "technical-flats");
-
-  const sections = [
-    { title: "Looks", items: looks, layout: "masonry" as const },
-    { title: "Process", items: process, layout: "masonry" as const },
-    { title: "Technical Flats", items: flats, layout: "structured-grid" as const },
-  ].filter((s) => s.items.length > 0);
+  const sections = COLLECTION_SECTIONS.map((s) => ({
+    title: s.label,
+    layout: s.layout,
+    items: items.filter((i) => resolveCollectionSection(i) === s.id),
+  })).filter((s) => s.items.length > 0);
 
   return (
     <div style={{ paddingTop: "var(--nav-height)" }}>

@@ -12,12 +12,12 @@ export default async function ProtectedAdminLayout({
   return (
     <div className="min-h-screen bg-cream" style={{ paddingTop: "var(--nav-height)" }}>
       <header className="border-b border-ink-100 bg-cream/95 backdrop-blur-sm sticky top-[var(--nav-height)] z-10">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-8">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 min-h-16 py-3 flex flex-wrap gap-y-2 items-center justify-between">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
             <Link href="/admin" className="font-display text-lg font-light text-ink-900">
               Studio
             </Link>
-            <nav className="flex items-center gap-6">
+            <nav className="flex flex-wrap items-center gap-x-6 gap-y-2">
               {[
                 { href: "/admin", label: "Overview" },
                 { href: "/admin/items", label: "Work" },
@@ -34,6 +34,15 @@ export default async function ProtectedAdminLayout({
               ))}
             </nav>
           </div>
+          <div className="flex items-center gap-6">
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-[11px] tracking-[0.18em] uppercase font-sans text-ink-500 hover:text-ink-900 transition-colors"
+          >
+            View site ↗
+          </a>
           <form action={logoutAction}>
             <button
               type="submit"
@@ -42,6 +51,7 @@ export default async function ProtectedAdminLayout({
               Sign out
             </button>
           </form>
+          </div>
         </div>
       </header>
 

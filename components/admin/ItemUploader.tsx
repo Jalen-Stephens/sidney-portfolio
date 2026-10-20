@@ -2,145 +2,114 @@
 
 import { useState, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { upload } from "@vercel/blob/client";
 import { createItem } from "@/lib/admin/actions";
-import { TOP_LEVEL_TAXONOMY } from "@/data/taxonomy";
+import { uploadFile, checkFile, titleFromFilename } from "@/lib/admin/upload-client";
+import { PlacementFields, describePlacement, type Placement } from "./Placement";
 import type { CollectionMeta } from "@/types/portfolio";
 
 interface ItemUploaderProps {
   collections: CollectionMeta[];
 }
 
-type Status = { name: string; state: "pending" | "done" | "error"; message?: string };
-
-async function readDimensions(file: File): Promise<{ w: number; h: number }> {
-  try {
-    const bmp = await createImageBitmap(file);
-    const dims = { w: bmp.width, h: bmp.height };
-    bmp.close();
-    return dims;
-  } catch {
-    return { w: 1200, h: 1500 };
-  }
-}
-
-function titleFromFilename(name: string): string {
-  return name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+interface Pick {
+  file: File;
+  preview: string;
+  title: string;
+  description: string;
+  state: "ready" | "uploading" | "done" | "error";
+  message?: string;
 }
 
 export default function ItemUploader({ collections }: ItemUploaderProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<File[]>([]);
+  const [picks, setPicks] = useState<Pick[]>([]);
   const [dragOver, setDragOver] = useState(false);
-  const [category, setCategory] = useState("garments");
-  const [collectionSlug, setCollectionSlug] = useState("");
-  const [subcategory, setSubcategory] = useState("");
-  const [featured, setFeatured] = useState(false);
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const [pending, startTransition] = useTransition();
+  const [placement, setPlacement] = useState<Placement>({
+    collectionSlug: "",
+    topLevelCategory: "garments",
+    subcategory: "",
+  });
+  const [busy, setBusy] = useState(false);
+  const [, startTransition] = useTransition();
 
   function addFiles(list: FileList | null) {
     if (!list) return;
-    const imgs = Array.from(list).filter((f) => f.type.startsWith("image/"));
-    setFiles((prev) => [...prev, ...imgs]);
+    const next = Array.from(list).map<Pick>((file) => {
+      const problem = checkFile(file);
+      return {
+        file,
+        preview: problem ? "" : URL.createObjectURL(file),
+        title: titleFromFilename(file.name),
+        description: "",
+        state: problem ? "error" : "ready",
+        message: problem ?? undefined,
+      };
+    });
+    setPicks((prev) => [...prev.filter((p) => p.state !== "done"), ...next]);
+  }
+
+  function patch(i: number, p: Partial<Pick>) {
+    setPicks((prev) => prev.map((x, idx) => (idx === i ? { ...x, ...p } : x)));
+  }
+
+  function removePick(i: number) {
+    setPicks((prev) => prev.filter((_, idx) => idx !== i));
   }
 
   async function handleUpload() {
-    if (files.length === 0) return;
-    const next: Status[] = files.map((f) => ({ name: f.name, state: "pending" }));
-    setStatuses(next);
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    setBusy(true);
+    let done = 0;
+    for (let i = 0; i < picks.length; i++) {
+      const p = picks[i];
+      if (p.state !== "ready" && p.state !== "error") continue;
+      if (checkFile(p.file)) continue;
+      patch(i, { state: "uploading", message: undefined });
       try {
-        const { w, h } = await readDimensions(file);
-        const blob = await upload(`portfolio/uploads/${file.name}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/admin/upload",
-        });
+        const up = await uploadFile(p.file, "uploads");
         const res = await createItem({
-          title: titleFromFilename(file.name),
-          description: "",
-          topLevelCategory: category,
-          subcategory: subcategory || undefined,
-          collectionSlug: collectionSlug || null,
-          featured,
-          imageUrl: blob.url,
-          blobPathname: blob.pathname,
-          imageWidth: w,
-          imageHeight: h,
+          title: p.title.trim() || titleFromFilename(p.file.name),
+          description: p.description,
+          topLevelCategory: placement.topLevelCategory,
+          subcategory: placement.subcategory || undefined,
+          collectionSlug: placement.collectionSlug || null,
+          featured: false,
+          imageUrl: up.url,
+          blobPathname: up.pathname,
+          imageWidth: up.width,
+          imageHeight: up.height,
         });
-        setStatuses((prev) =>
-          prev.map((s, idx) =>
-            idx === i
-              ? res.ok
-                ? { ...s, state: "done" }
-                : { ...s, state: "error", message: res.error }
-              : s,
-          ),
-        );
+        if (res.ok) done++;
+        patch(i, res.ok ? { state: "done" } : { state: "error", message: res.error });
       } catch (err) {
-        setStatuses((prev) =>
-          prev.map((s, idx) =>
-            idx === i ? { ...s, state: "error", message: (err as Error).message } : s,
-          ),
-        );
+        patch(i, { state: "error", message: (err as Error).message });
       }
     }
-
-    setFiles([]);
-    startTransition(() => router.refresh());
+    setBusy(false);
+    if (done > 0) startTransition(() => router.refresh());
   }
+
+  const ready = picks.filter((p) => (p.state === "ready" || p.state === "error") && !checkFile(p.file)).length;
+  const live = describePlacement(
+    {
+      collection: placement.collectionSlug || undefined,
+      topLevelCategory: placement.topLevelCategory,
+      subcategory: placement.subcategory,
+    },
+    collections,
+  );
 
   return (
     <section className="border border-ink-100 p-6 mb-12">
       <h2 className="font-display text-2xl font-light text-ink-900 mb-1">Upload work</h2>
       <p className="text-[11px] tracking-[0.14em] uppercase font-sans text-ink-400 mb-6">
-        Drag images in, set where they belong, then upload. You can refine each one below.
+        1. Choose where it shows · 2. Add images · 3. Name them · 4. Upload
       </p>
 
-      {/* Metadata applied to the batch */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <label className="block">
-          <span className="text-[10px] tracking-[0.2em] uppercase font-sans text-ink-400">Category</span>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 w-full border border-ink-200 bg-cream px-3 py-2 text-sm font-sans focus:outline-none focus:border-ink-900"
-          >
-            {TOP_LEVEL_TAXONOMY.map((c) => (
-              <option key={c.id} value={c.id}>{c.label}</option>
-            ))}
-          </select>
-        </label>
-        <label className="block">
-          <span className="text-[10px] tracking-[0.2em] uppercase font-sans text-ink-400">Collection</span>
-          <select
-            value={collectionSlug}
-            onChange={(e) => setCollectionSlug(e.target.value)}
-            className="mt-1 w-full border border-ink-200 bg-cream px-3 py-2 text-sm font-sans focus:outline-none focus:border-ink-900"
-          >
-            <option value="">— None —</option>
-            {collections.map((c) => (
-              <option key={c.slug} value={c.slug}>{c.title}</option>
-            ))}
-          </select>
-        </label>
-        <label className="block">
-          <span className="text-[10px] tracking-[0.2em] uppercase font-sans text-ink-400">Subcategory</span>
-          <input
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            placeholder="e.g. looks, dresses"
-            className="mt-1 w-full border border-ink-200 bg-cream px-3 py-2 text-sm font-sans focus:outline-none focus:border-ink-900"
-          />
-        </label>
-        <label className="flex items-end gap-2 pb-2">
-          <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
-          <span className="text-[11px] tracking-[0.12em] uppercase font-sans text-ink-500">Featured</span>
-        </label>
-      </div>
+      <PlacementFields value={placement} collections={collections} onChange={setPlacement} />
+      <p className="mt-2 mb-5 text-[11px] font-sans text-ink-400">
+        New uploads will appear at: <span className="text-ink-700">{live.text}</span>
+      </p>
 
       {/* Dropzone */}
       <div
@@ -153,52 +122,75 @@ export default function ItemUploader({ collections }: ItemUploaderProps) {
         }`}
       >
         <p className="font-display text-xl font-light text-ink-700">Drop images here</p>
-        <p className="text-[11px] tracking-[0.14em] uppercase font-sans text-ink-300 mt-1">or click to browse</p>
+        <p className="text-[11px] tracking-[0.14em] uppercase font-sans text-ink-300 mt-1">
+          or tap to browse · JPEG, PNG, WebP · up to 30 MB
+        </p>
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
           multiple
           hidden
-          onChange={(e) => addFiles(e.target.files)}
+          onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }}
         />
       </div>
 
       {/* Selected files */}
-      {files.length > 0 && (
-        <div className="mt-5">
-          <ul className="flex flex-wrap gap-2 mb-4">
-            {files.map((f, i) => (
-              <li key={i} className="text-[11px] font-sans text-ink-600 border border-ink-100 px-3 py-1">
-                {f.name}
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={handleUpload}
-            disabled={pending}
-            className="bg-ink-900 text-cream px-7 py-3 text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors disabled:opacity-50"
-          >
-            {pending ? "Uploading…" : `Upload ${files.length} image${files.length > 1 ? "s" : ""}`}
-          </button>
-        </div>
-      )}
-
-      {/* Upload statuses */}
-      {statuses.length > 0 && (
-        <ul className="mt-5 space-y-1">
-          {statuses.map((s, i) => (
-            <li key={i} className="text-[12px] font-sans flex items-center gap-2">
-              <span className={
-                s.state === "done" ? "text-green-600" : s.state === "error" ? "text-blush-600" : "text-ink-400"
-              }>
-                {s.state === "done" ? "✓" : s.state === "error" ? "✕" : "…"}
-              </span>
-              <span className="text-ink-600">{s.name}</span>
-              {s.message && <span className="text-blush-600">— {s.message}</span>}
-            </li>
+      {picks.length > 0 && (
+        <div className="mt-5 space-y-3">
+          {picks.map((p, i) => (
+            <div key={`${p.file.name}-${i}`} className="flex gap-3 items-start border border-ink-100 p-3">
+              {p.preview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={p.preview} alt="" className="w-16 h-20 object-cover bg-blush-50 flex-shrink-0" />
+              ) : (
+                <div className="w-16 h-20 bg-blush-50 flex-shrink-0" />
+              )}
+              <div className="flex-1 min-w-0 space-y-2">
+                <input
+                  value={p.title}
+                  onChange={(e) => patch(i, { title: e.target.value })}
+                  disabled={p.state === "done" || p.state === "uploading"}
+                  placeholder="Title"
+                  className="w-full border-b border-ink-100 bg-transparent py-1 font-display text-base text-ink-900 focus:outline-none focus:border-ink-900 disabled:opacity-60"
+                />
+                <input
+                  value={p.description}
+                  onChange={(e) => patch(i, { description: e.target.value })}
+                  disabled={p.state === "done" || p.state === "uploading"}
+                  placeholder="Description (optional)"
+                  className="w-full border border-ink-100 bg-cream px-2 py-1 text-sm font-sans text-ink-700 focus:outline-none focus:border-ink-900 disabled:opacity-60"
+                />
+                <p className="text-[11px] font-sans">
+                  {p.state === "done" && <span className="text-green-700">✓ Uploaded — live now</span>}
+                  {p.state === "uploading" && <span className="text-ink-400">Uploading…</span>}
+                  {p.state === "error" && <span className="text-blush-600">✕ {p.message}</span>}
+                </p>
+              </div>
+              {p.state !== "uploading" && p.state !== "done" && (
+                <button onClick={() => removePick(i)} className="text-ink-300 hover:text-blush-600 px-1" aria-label="Remove">
+                  ×
+                </button>
+              )}
+            </div>
           ))}
-        </ul>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={handleUpload}
+              disabled={busy || ready === 0}
+              className="bg-ink-900 text-cream px-7 py-3 text-[11px] tracking-[0.2em] uppercase font-sans hover:bg-ink-700 transition-colors disabled:opacity-40"
+            >
+              {busy ? "Uploading…" : `Upload ${ready} image${ready === 1 ? "" : "s"}`}
+            </button>
+            <button
+              onClick={() => setPicks([])}
+              disabled={busy}
+              className="text-[11px] tracking-[0.16em] uppercase font-sans text-ink-400 hover:text-ink-900"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
       )}
     </section>
   );

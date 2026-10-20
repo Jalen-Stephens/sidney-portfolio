@@ -17,8 +17,8 @@ export default async function AdminItemsPage() {
       </p>
       <h1 className="font-display font-light text-4xl text-ink-900 mb-2">Work</h1>
       <p className="text-sm font-sans text-ink-400 mb-10">
-        Upload images above. Below, each item has <strong className="text-ink-600 font-normal">Save</strong> and{" "}
-        <strong className="text-ink-600 font-normal">Delete</strong> on the right, and a ⠿ handle on the left to drag and reorder.
+        Upload new images first. Below, change where each image shows, edit its text, then press{" "}
+        <strong className="text-ink-600 font-normal">Save</strong> on that row. Drag the ⠿ handle to reorder.
       </p>
 
       <ItemUploader collections={collections} />

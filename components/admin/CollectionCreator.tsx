@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { upload } from "@vercel/blob/client";
+import { uploadFile, checkFile } from "@/lib/admin/upload-client";
 import { createCollection } from "@/lib/admin/actions";
 
 const inputCls =
@@ -23,6 +23,9 @@ export default function CollectionCreator() {
   const [busy, setBusy] = useState(false);
 
   function pickCover(file: File | null) {
+    const problem = file ? checkFile(file) : null;
+    setMsg(problem);
+    if (problem) return;
     setCover(file);
     setCoverPreview(file ? URL.createObjectURL(file) : null);
   }
@@ -38,21 +41,13 @@ export default function CollectionCreator() {
     setBusy(true);
     setMsg(null);
     try {
-      let w = 1200, h = 800;
-      try {
-        const bmp = await createImageBitmap(cover);
-        w = bmp.width; h = bmp.height; bmp.close();
-      } catch {}
-      const blob = await upload(`portfolio/collections/${title}-cover-${cover.name}`, cover, {
-        access: "public",
-        handleUploadUrl: "/api/admin/upload",
-      });
+      const up = await uploadFile(cover, "collections", { fallbackSize: { w: 1200, h: 800 } });
       const res = await createCollection({
         title, season, year, description,
-        coverImageUrl: blob.url,
-        coverImageWidth: w,
-        coverImageHeight: h,
-        coverBlobPathname: blob.pathname,
+        coverImageUrl: up.url,
+        coverImageWidth: up.width,
+        coverImageHeight: up.height,
+        coverBlobPathname: up.pathname,
         coverAlt: title,
       });
       if (res.ok) {
