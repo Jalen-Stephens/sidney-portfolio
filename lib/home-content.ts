@@ -50,7 +50,7 @@ export async function getFeaturedSections(): Promise<FeaturedSection[]> {
   return [...collectionCards, ...categoryCards].slice(0, 4);
 }
 
-/** "Work by Category" cards with live representative imagery + counts. */
+/** "Work by Category" cards (Collections + gallery categories that have work) with live representative imagery + counts. */
 export async function getCategoryCards(): Promise<CategoryCard[]> {
   const [cols, gallery] = await Promise.all([getAllCollections(), getGalleryItems()]);
   const countOf = (cat: TopLevelCategory) =>
@@ -67,7 +67,8 @@ export async function getCategoryCards(): Promise<CategoryCard[]> {
       imageUrl: cols[0]?.coverImageUrl ?? FALLBACK_IMG,
       count: cols.length,
     },
-    ...GALLERY_CATEGORIES.map((cat) => ({
+    // Skip empty categories so the index never shows a placeholder image.
+    ...GALLERY_CATEGORIES.filter((cat) => countOf(cat.id) > 0).map((cat) => ({
       id: cat.id,
       label: cat.label,
       description: cat.description,
